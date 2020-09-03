@@ -9,13 +9,13 @@ import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
-import br.com.lepsistemas.telegram.domain.usecase.EntryUpdate;
-import br.com.lepsistemas.telegram.infrastructure.UpdateToChatMessage;
+import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
+import br.com.lepsistemas.telegram.infrastructure.convert.UpdateToChatMessage;
 
 @RestController
 public class WebhookController {
 	
-	private EntryUpdate entry;
+	private MessageHandler entry;
 	
 	@PostMapping("/webhook")
 	public void webhook(@RequestBody String body) {
@@ -25,7 +25,7 @@ public class WebhookController {
 	}
 	
 	@Autowired
-	public void setEntryUpdate(EntryUpdate entry) {
+	public void setEntryUpdate(MessageHandler entry) {
 		this.entry = entry;
 	}
 

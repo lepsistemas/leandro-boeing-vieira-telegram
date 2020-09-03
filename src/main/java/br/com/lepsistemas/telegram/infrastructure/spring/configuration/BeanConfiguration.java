@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.pengrad.telegrambot.TelegramBot;
 
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
-import br.com.lepsistemas.telegram.domain.usecase.EntryUpdate;
+import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
 
 @Configuration
@@ -17,8 +17,8 @@ public class BeanConfiguration {
 	private String telegramBotToken;
 
 	@Bean
-	public EntryUpdate entryUpdate() {
-		return new EntryUpdate(chatBot());
+	public MessageHandler entryUpdate() {
+		return new MessageHandler(chatBot());
 	}
 	
 	@Bean

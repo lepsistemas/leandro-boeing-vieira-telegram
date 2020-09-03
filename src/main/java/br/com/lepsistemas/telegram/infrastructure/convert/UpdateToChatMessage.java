@@ -1,4 +1,4 @@
-package br.com.lepsistemas.telegram.infrastructure;
+package br.com.lepsistemas.telegram.infrastructure.convert;
 
 import com.pengrad.telegrambot.model.Update;
 

@@ -9,27 +9,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
+import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 @ExtendWith(MockitoExtension.class)
-public class EntryUpdateTest {
+public class MessageHandlerTest {
 	
-	private EntryUpdate entry;
+	private MessageHandler entry;
 	
 	@Mock
 	private Bot bot;
 	
 	@BeforeEach
 	public void setUp() {
-		this.entry = new EntryUpdate(this.bot);
+		this.entry = new MessageHandler(this.bot);
 	}
 	
 	@Test
 	public void should_send_message() {
-		EntryMessage message = new EntryMessage(1L, "Hi!");
+		EntryMessage entry = new EntryMessage(1L, "Hi!");
+		this.entry.handle(entry);
 		
-		this.entry.handle(message);
-		
-		verify(this.bot).send(message);
+		ResponseMessage response = new ResponseMessage(1L, "You typed: Hi!");
+		verify(this.bot).send(response);
 	}
 
 }

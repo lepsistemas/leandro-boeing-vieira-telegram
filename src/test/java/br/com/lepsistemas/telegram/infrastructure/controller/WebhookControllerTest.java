@@ -12,8 +12,8 @@ import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
-import br.com.lepsistemas.telegram.domain.usecase.EntryUpdate;
-import br.com.lepsistemas.telegram.infrastructure.UpdateToChatMessage;
+import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
+import br.com.lepsistemas.telegram.infrastructure.convert.UpdateToChatMessage;
 import br.com.lepsistemas.telegram.infrastructure.spring.controller.WebhookController;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +22,7 @@ public class WebhookControllerTest {
 	private WebhookController controller;
 	
 	@Mock
-	private EntryUpdate entry;
+	private MessageHandler entry;
 	
 	@BeforeEach
 	public void setUp() {

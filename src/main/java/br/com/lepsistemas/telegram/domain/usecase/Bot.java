@@ -1,9 +1,9 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
-import br.com.lepsistemas.telegram.domain.model.EntryMessage;
+import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 public interface Bot {
 	
-	public void send(EntryMessage message);
+	public void send(ResponseMessage message);
 
 }
