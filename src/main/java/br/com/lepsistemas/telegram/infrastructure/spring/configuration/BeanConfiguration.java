@@ -8,6 +8,8 @@ import com.pengrad.telegrambot.TelegramBot;
 
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
 import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
+import br.com.lepsistemas.telegram.domain.usecase.PrepareGreetingsResponse;
+import br.com.lepsistemas.telegram.domain.usecase.PrepareResponseMessage;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
 
 @Configuration
@@ -18,9 +20,14 @@ public class BeanConfiguration {
 
 	@Bean
 	public MessageHandler entryUpdate() {
-		return new MessageHandler(chatBot());
+		return new MessageHandler(chatBot(), greetingsResponse());
 	}
 	
+	@Bean
+	public PrepareResponseMessage greetingsResponse() {
+		return new PrepareGreetingsResponse();
+	}
+
 	@Bean
 	public Bot chatBot() {
 		return new ChatBot();
