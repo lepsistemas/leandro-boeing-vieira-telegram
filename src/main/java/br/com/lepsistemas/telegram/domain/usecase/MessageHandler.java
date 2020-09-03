@@ -14,9 +14,9 @@ public class MessageHandler {
 	}
 
 	public void handle(EntryMessage entry) {
-		ResponseMessage response = new ResponseMessage(entry.id(), entry.text());
-		ResponseMessage output = this.prepare.prepare(response);
-		this.bot.send(output);
+		ResponseMessage preResponse = new ResponseMessage(entry.id(), entry.text());
+		ResponseMessage postResponse = this.prepare.prepare(preResponse);
+		this.bot.send(postResponse);
 	}
 
 }
