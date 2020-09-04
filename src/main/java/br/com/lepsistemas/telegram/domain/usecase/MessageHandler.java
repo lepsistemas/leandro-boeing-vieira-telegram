@@ -21,7 +21,7 @@ public class MessageHandler {
 	}
 
 	public void handle(EntryMessage entry) {
-		if (COMMAND_BOT_STARTING_TEXT.equals(entry.text())) {
+		if (entry.text().startsWith(COMMAND_BOT_STARTING_TEXT)) {
 			return;
 		}
 		List<Intent> intents = this.recognition.identify(entry.text());
