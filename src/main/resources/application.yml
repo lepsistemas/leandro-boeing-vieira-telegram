@@ -1,3 +1,9 @@
 telegram:
   bot:
-    token: $TELEGRAM_BOT_TOKEN
+    token: ${TELEGRAM_BOT_TOKEN}
+
+watson:
+  api:
+    key: ${WATSON_API_KEY}
+  assistant:
+    id: ${WATSON_ASSISTANT_ID}

@@ -1,5 +1,8 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
+import static java.util.Arrays.asList;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
+import br.com.lepsistemas.telegram.domain.model.Intent;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,23 +25,36 @@ public class MessageHandlerTest {
 	private Bot bot;
 	
 	@Mock
-	private PrepareResponseMessage prepare;
+	private IntentRecognition recognition;
+	
+	@Mock
+	private IntentThreshold threshold;
 	
 	@BeforeEach
 	public void setUp() {
-		this.entry = new MessageHandler(this.bot, this.prepare);
+		this.entry = new MessageHandler(this.bot, this.recognition, this.threshold);
+	}
+	
+	@Test
+	public void should_just_return_when_message_is_start() {
+		EntryMessage entry = new EntryMessage(1L, "/start");
+		this.entry.handle(entry);
+		
+		verify(this.recognition, never()).identify("/start");
+		verify(this.threshold, never()).verify(anyList());
 	}
 	
 	@Test
 	public void should_send_message() {
-		ResponseMessage preResponse = new ResponseMessage(1L, "Hi!");
-		ResponseMessage postResponse = new ResponseMessage(1L, "You typed: Hi!");
-		when(this.prepare.prepare(preResponse)).thenReturn(postResponse);
+		Intent intent = new Intent("greetings", 0.92);
+		when(this.recognition.identify("Hi!")).thenReturn(asList(intent));
+//		when(this.threshold.verify(asList(intent))).thenReturn(intent);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
 		this.entry.handle(entry);
 		
-		verify(this.bot).send(postResponse);
+		ResponseMessage message = new ResponseMessage(1L, "I believe you mean to interact with me about greetings");
+		verify(this.bot).send(message);
 	}
 
 }
