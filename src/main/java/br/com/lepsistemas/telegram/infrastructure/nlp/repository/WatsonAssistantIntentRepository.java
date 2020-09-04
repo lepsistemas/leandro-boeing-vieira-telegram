@@ -34,7 +34,7 @@ public class WatsonAssistantIntentRepository implements IntentRepository {
 
 	@Override
 	public List<Intent> by(String text) {
-		log.info("--- Retrieving intent for text: " + text + " ---");
+		log.info("--- Retrieving intent for text: {} ---", text);
 		MessageInput input = new MessageInput.Builder().text(text).build();
 		MessageOptions options = new MessageOptions.Builder().assistantId(this.watsonAssistantId).sessionId(this.sessionId()).input(input).build();
 		MessageResponse response = this.assistant.message(options).execute().getResult();
