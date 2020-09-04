@@ -17,8 +17,10 @@ import com.ibm.watson.assistant.v2.model.SessionResponse;
 
 import br.com.lepsistemas.telegram.domain.model.Intent;
 import br.com.lepsistemas.telegram.domain.usecase.IntentRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class WatsonAssistantIntentRepository implements IntentRepository {
 	
 	private Assistant assistant;
@@ -32,6 +34,7 @@ public class WatsonAssistantIntentRepository implements IntentRepository {
 
 	@Override
 	public List<Intent> by(String text) {
+		log.info("--- Retrieving intent for text: " + text + " ---");
 		MessageInput input = new MessageInput.Builder().text(text).build();
 		MessageOptions options = new MessageOptions.Builder().assistantId(this.watsonAssistantId).sessionId(this.sessionId()).input(input).build();
 		MessageResponse response = this.assistant.message(options).execute().getResult();
