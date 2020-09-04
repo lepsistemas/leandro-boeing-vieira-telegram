@@ -8,7 +8,7 @@ import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 public class MessageHandler {
 	
-	private static final String START_BOT_TEXT = "/start";
+	private static final String COMMAND_BOT_STARTING_TEXT = "/";
 	
 	private Bot bot;
 	private IntentRecognition recognition;
@@ -21,7 +21,7 @@ public class MessageHandler {
 	}
 
 	public void handle(EntryMessage entry) {
-		if (START_BOT_TEXT.equals(entry.text())) {
+		if (COMMAND_BOT_STARTING_TEXT.equals(entry.text())) {
 			return;
 		}
 		List<Intent> intents = this.recognition.identify(entry.text());
