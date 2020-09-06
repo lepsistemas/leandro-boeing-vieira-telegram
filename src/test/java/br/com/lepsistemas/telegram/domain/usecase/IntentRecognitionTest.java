@@ -1,11 +1,8 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.lepsistemas.telegram.domain.exception.NoIntentRecognizedException;
 import br.com.lepsistemas.telegram.domain.model.Intent;
+import br.com.lepsistemas.telegram.domain.model.Output;
 
 @ExtendWith(MockitoExtension.class)
 public class IntentRecognitionTest {
@@ -22,7 +20,7 @@ public class IntentRecognitionTest {
 	private IntentRecognition recognition;
 	
 	@Mock
-	private IntentRepository repository;
+	private DialogFlowRepository repository;
 	
 	@BeforeEach
 	public void setUp() {
@@ -33,15 +31,20 @@ public class IntentRecognitionTest {
 	public void should_identify_intents() {
 		Intent intent1 = new Intent("intent1", 0.92);
 		Intent intent2 = new Intent("intent2", 0.8);
-		when(this.repository.by("Hi!")).thenReturn(asList(intent1, intent2));
+		Output output = new Output();
+		output.addIntent(intent1);
+		output.addIntent(intent2);
+		when(this.repository.forMessage("Hi!")).thenReturn(output);
 		
-		List<Intent> intents = this.recognition.identify("Hi!");
+		Output result = this.recognition.identify("Hi!");
 		
-		assertThat(intents.size()).isEqualTo(2);
+		assertThat(result.hasIntent()).isTrue();
 	}
 	
 	@Test
 	public void should_throw_exception_if_does_not_recognize_any_intent() {
+		Output output = new Output();
+		when(this.repository.forMessage("Hi!")).thenReturn(output);
 		assertThatThrownBy(() -> {
 			this.recognition.identify("Hi!");
 		}).isInstanceOf(NoIntentRecognizedException.class);

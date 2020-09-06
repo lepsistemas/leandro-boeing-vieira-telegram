@@ -11,7 +11,7 @@ import br.com.lepsistemas.telegram.domain.usecase.Bot;
 import br.com.lepsistemas.telegram.domain.usecase.IntentRecognition;
 import br.com.lepsistemas.telegram.domain.usecase.IntentThreshold;
 import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
-import br.com.lepsistemas.telegram.infrastructure.nlp.repository.WatsonAssistantIntentRepository;
+import br.com.lepsistemas.telegram.infrastructure.nlp.repository.WatsonAssistantDialogFlowRepository;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
 
 @Configuration
@@ -21,7 +21,7 @@ public class BeanConfiguration {
 	private String telegramBotToken;
 	
 	@Autowired
-	private WatsonAssistantIntentRepository watsonAssistantIntentRepository;
+	private WatsonAssistantDialogFlowRepository watsonAssistantIntentRepository;
 
 	@Bean
 	public MessageHandler entryUpdate() {

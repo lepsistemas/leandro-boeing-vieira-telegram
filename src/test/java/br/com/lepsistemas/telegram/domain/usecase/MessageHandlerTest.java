@@ -1,6 +1,5 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
-import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -14,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.Intent;
+import br.com.lepsistemas.telegram.domain.model.Output;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,14 +46,17 @@ public class MessageHandlerTest {
 	
 	@Test
 	public void should_send_message() {
+		Output output = new Output();
 		Intent intent = new Intent("greetings", 0.92);
-		when(this.recognition.identify("Hi!")).thenReturn(asList(intent));
+		output.addIntent(intent);
+		output.addText("Hey!");
+		when(this.recognition.identify("Hi!")).thenReturn(output);
 //		when(this.threshold.verify(asList(intent))).thenReturn(intent);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
 		this.entry.handle(entry);
 		
-		ResponseMessage message = new ResponseMessage(1L, "I believe you mean to interact with me about greetings");
+		ResponseMessage message = new ResponseMessage(1L, "Hey!");
 		verify(this.bot).send(message);
 	}
 

@@ -1,9 +1,7 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
-import java.util.List;
-
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
-import br.com.lepsistemas.telegram.domain.model.Intent;
+import br.com.lepsistemas.telegram.domain.model.Output;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 public class MessageHandler {
@@ -24,10 +22,10 @@ public class MessageHandler {
 		if (entry.text().startsWith(COMMAND_BOT_STARTING_TEXT)) {
 			return;
 		}
-		List<Intent> intents = this.recognition.identify(entry.text());
+		Output output = this.recognition.identify(entry.text());
 //		Intent intent = this.threshold.verify(intents);
 		
-		ResponseMessage message = new ResponseMessage(entry.id(), "I believe you mean to interact with me about " + intents.get(0).key());
+		ResponseMessage message = new ResponseMessage(entry.id(), output.firstText());
 		this.bot.send(message);
 	}
 

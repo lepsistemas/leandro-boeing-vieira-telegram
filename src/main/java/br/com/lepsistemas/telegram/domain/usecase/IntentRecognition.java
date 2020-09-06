@@ -1,24 +1,22 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
-import java.util.List;
-
 import br.com.lepsistemas.telegram.domain.exception.NoIntentRecognizedException;
-import br.com.lepsistemas.telegram.domain.model.Intent;
+import br.com.lepsistemas.telegram.domain.model.Output;
 
 public class IntentRecognition {
 	
-	private IntentRepository repository;
+	private DialogFlowRepository repository;
 	
-	public IntentRecognition(IntentRepository repository) {
+	public IntentRecognition(DialogFlowRepository repository) {
 		this.repository = repository;
 	}
 
-	public List<Intent> identify(String text) {
-		List<Intent> intents = this.repository.by(text);
-		if (intents.isEmpty()) {
+	public Output identify(String text) {
+		Output output = this.repository.forMessage(text);
+		if (!output.hasIntent()) {
 			throw new NoIntentRecognizedException();
 		}
-		return intents;
+		return output;
 	}
 
 }
