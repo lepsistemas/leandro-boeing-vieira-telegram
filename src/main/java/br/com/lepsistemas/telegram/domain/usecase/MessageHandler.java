@@ -22,7 +22,8 @@ public class MessageHandler {
 		if (entry.text().startsWith(COMMAND_BOT_STARTING_TEXT)) {
 			return;
 		}
-		Output output = this.recognition.identify(entry.text());
+		String normalizedText = entry.text().replaceAll("\n", "").replaceAll("\r", "").trim();
+		Output output = this.recognition.identify(normalizedText);
 //		Intent intent = this.threshold.verify(intents);
 		
 		ResponseMessage message = new ResponseMessage(entry.id(), output.firstText());

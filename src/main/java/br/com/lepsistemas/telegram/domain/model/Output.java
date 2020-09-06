@@ -37,7 +37,13 @@ public class Output {
 	}
 
 	public String firstText() {
-		return this.texts.get(0);
+		String response = "";
+		for(String text : this.texts) {
+			if (!text.isBlank()) {
+				response = text;
+			}
+		}
+		return response;
 	}
 
 }
