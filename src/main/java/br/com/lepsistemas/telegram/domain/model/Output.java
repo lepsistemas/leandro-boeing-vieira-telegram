@@ -39,7 +39,7 @@ public class Output {
 	public String firstText() {
 		String response = "";
 		for(String text : this.texts) {
-			if (!text.isBlank()) {
+			if (!text.isEmpty()) {
 				response = text;
 			}
 		}
