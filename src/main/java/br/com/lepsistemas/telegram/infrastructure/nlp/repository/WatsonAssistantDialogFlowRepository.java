@@ -40,18 +40,31 @@ public class WatsonAssistantDialogFlowRepository implements DialogFlowRepository
 		
 		Output output = new Output();
 		
-		response.getOutput().getIntents().forEach(intent -> {
-			output.addIntent(new Intent(intent.intent(), intent.confidence()));
-		});
+		fillIntents(response, output);
+		fillEntities(response, output);
+		fillTexts(response, output);
 		
+		return output;
+	}
+
+	private void fillTexts(MessageResponse response, Output output) {
+		response.getOutput().getGeneric().forEach(generic -> {
+			if ("text".equals(generic.responseType())) {
+				output.addText(generic.text());
+			}
+		});
+	}
+
+	private void fillEntities(MessageResponse response, Output output) {
 		response.getOutput().getEntities().forEach(entity -> {
 			output.addEntity(new Entity(entity.entity(), entity.value(), entity.confidence()));
 		});
-		
-		response.getOutput().getGeneric().forEach(generic -> {
-			output.addText(generic.text());
+	}
+
+	private void fillIntents(MessageResponse response, Output output) {
+		response.getOutput().getIntents().forEach(intent -> {
+			output.addIntent(new Intent(intent.intent(), intent.confidence()));
 		});
-		return output;
 	}
 
 	private String sessionId() {
