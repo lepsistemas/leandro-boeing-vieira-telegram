@@ -19,7 +19,9 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	compile 'com.github.pengrad:java-telegram-bot-api:4.9.0'
-	compile 'com.ibm.watson:ibm-watson:8.6.0'
+	compile 'com.ibm.watson:assistant:8.6.0'
+	compile 'edu.stanford.nlp:stanford-corenlp:4.0.0'
+	compile 'edu.stanford.nlp:stanford-corenlp:4.0.0:models'
 	compileOnly 'org.projectlombok:lombok:1.18.12'
 }
 

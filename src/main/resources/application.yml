@@ -3,7 +3,8 @@ telegram:
     token: ${TELEGRAM_BOT_TOKEN}
 
 watson:
-  api:
-    key: ${WATSON_API_KEY}
   assistant:
+    key: ${WATSON_ASSISTANT_KEY}
     id: ${WATSON_ASSISTANT_ID}
+  nlu:
+    key: ${WATSON_NLU_KEY}

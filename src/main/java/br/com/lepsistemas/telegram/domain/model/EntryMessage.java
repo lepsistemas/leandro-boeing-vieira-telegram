@@ -7,6 +7,7 @@ public class EntryMessage {
 	
 	private Long id;
 	private String text;
+	private String speaker;
 	
 	public EntryMessage(long id, String text) {
 		this.id = id;
@@ -19,6 +20,14 @@ public class EntryMessage {
 	
 	public String text() {
 		return this.text;
+	}
+	
+	public void speaker(String speaker) {
+		this.speaker = speaker;
+	}
+	
+	public String speaker() {
+		return this.speaker;
 	}
 
 }

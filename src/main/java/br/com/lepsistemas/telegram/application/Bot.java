@@ -1,4 +1,4 @@
-package br.com.lepsistemas.telegram.domain.usecase;
+package br.com.lepsistemas.telegram.application;
 
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 

@@ -7,11 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 import com.pengrad.telegrambot.TelegramBot;
 
-import br.com.lepsistemas.telegram.domain.usecase.Bot;
-import br.com.lepsistemas.telegram.domain.usecase.IntentRecognition;
-import br.com.lepsistemas.telegram.domain.usecase.IntentThreshold;
-import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
-import br.com.lepsistemas.telegram.infrastructure.nlp.repository.WatsonAssistantDialogFlowRepository;
+import br.com.lepsistemas.telegram.application.Bot;
+import br.com.lepsistemas.telegram.application.EntryMessageEnrichment;
+import br.com.lepsistemas.telegram.application.MessageHandler;
+import br.com.lepsistemas.telegram.infrastructure.stanfordnlp.StanfordDiscoverSpeakerRepository;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
 
 @Configuration
@@ -21,26 +20,21 @@ public class BeanConfiguration {
 	private String telegramBotToken;
 	
 	@Autowired
-	private WatsonAssistantDialogFlowRepository watsonAssistantIntentRepository;
+	private StanfordDiscoverSpeakerRepository nluRepository;
 
 	@Bean
 	public MessageHandler entryUpdate() {
-		return new MessageHandler(chatBot(), intentRecognition(), intentThreshold());
+		return new MessageHandler(chatBot(), entryMessageEnrichment());
 	}
 	
 	@Bean
-	public IntentRecognition intentRecognition() {
-		return new IntentRecognition(this.watsonAssistantIntentRepository);
+	public EntryMessageEnrichment entryMessageEnrichment() {
+		return new EntryMessageEnrichment(nluRepository);
 	}
 	
 //	@Bean IntentRepository intentRepository() {
 //		return new WatsonAssistantIntentRepository(watsonApiKey, watsonAssistantId);
 //	}
-	
-	@Bean
-	public IntentThreshold intentThreshold() {
-		return new IntentThreshold();
-	}
 
 	@Bean
 	public Bot chatBot() {

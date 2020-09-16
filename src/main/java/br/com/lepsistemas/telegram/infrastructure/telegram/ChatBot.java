@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 
+import br.com.lepsistemas.telegram.application.Bot;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
-import br.com.lepsistemas.telegram.domain.usecase.Bot;
 
 public class ChatBot implements Bot {
 	
