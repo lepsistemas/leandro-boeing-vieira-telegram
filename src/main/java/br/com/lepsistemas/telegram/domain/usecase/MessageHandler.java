@@ -38,7 +38,8 @@ public class MessageHandler {
 		
 		if (message.text() != null) {
 			MessageHandler.log.info("--- Sending... ChatId: {} - {} ---", message.id(), message);
-			this.bot.send(messageWithEmoji);
+			ResponseMessage lep = new ResponseMessage(message.id(), "Restar!");
+			this.bot.send(lep);
 		}
 		
 		return message;
