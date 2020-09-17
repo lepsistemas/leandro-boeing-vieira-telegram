@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
 
-import br.com.lepsistemas.telegram.application.MessageHandler;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
+import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
 import br.com.lepsistemas.telegram.infrastructure.convert.UpdateToEntryMessage;
 
 @RestController
@@ -25,7 +25,7 @@ public class WebhookController {
 		Update update = BotUtils.parseUpdate(body);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		ResponseMessage response = this.entry.handle(message);
-		return ResponseEntity.status(HttpStatus.OK).body(response.text());
+		return ResponseEntity.status(HttpStatus.OK).body(response != null ? response.text() : null);
 	}
 	
 	@Autowired

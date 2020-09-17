@@ -1,4 +1,4 @@
-package br.com.lepsistemas.telegram.application;
+package br.com.lepsistemas.telegram.domain.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
@@ -45,11 +46,12 @@ public class MessageHandlerTest {
 	@Test
 	public void should_send_message() {
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
-		EntryMessage enrichedEntry = new EntryMessage(1L, "Enriched - Hi!");
-		when(this.enrich.message(entry)).thenReturn(enrichedEntry);
+		EnrichedMessage enriched = new EnrichedMessage(entry);
+		enriched.response("Hey!");
+		when(this.enrich.message(entry)).thenReturn(enriched);
 		
 		ResponseMessage result = this.entry.handle(entry);
-		ResponseMessage message = new ResponseMessage(1L, "Enriched - Hi!");
+		ResponseMessage message = new ResponseMessage(1L, "Hey!");
 		
 		assertThat(result).isEqualTo(message);
 		
