@@ -26,7 +26,9 @@ public class MessageHandler {
 		// For now I'm only returning what the user typed
 		
 		ResponseMessage message = new ResponseMessage(entry.id(), enriched.response());
-		this.bot.send(message);
+		if (message.text() != null) {
+			this.bot.send(message);
+		}
 		
 		return message;
 	}
