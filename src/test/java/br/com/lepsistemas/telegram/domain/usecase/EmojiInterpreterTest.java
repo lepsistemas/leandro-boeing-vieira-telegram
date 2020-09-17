@@ -15,7 +15,7 @@ public class EmojiInterpreterTest {
 		ResponseMessage message = new ResponseMessage(1L, "Hi :)");
 		ResponseMessage result = emoji.interpret(message);
 		
-		assertThat(result.text()).isEqualTo("Hi \\xF0\\x9F\\x98\\x89");
+		assertThat(result.text()).isEqualTo("Hi \u1F609");
 	}
 
 }
