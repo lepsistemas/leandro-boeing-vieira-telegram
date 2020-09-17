@@ -1,4 +1,4 @@
-package br.com.lepsistemas.telegram.infrastructure.telegram.watson;
+package br.com.lepsistemas.telegram.infrastructure.watson;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -3,7 +3,6 @@ telegram:
     token: dummyToken
 
 watson:
-  api:
-    key: dummyKey
   assistant:
     id: dummyId
+    key: dummyKey

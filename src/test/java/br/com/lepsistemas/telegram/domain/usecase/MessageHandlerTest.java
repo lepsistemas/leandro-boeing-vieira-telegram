@@ -26,10 +26,13 @@ public class MessageHandlerTest {
 	
 	@Mock
 	private EntryMessageEnrichment enrich;
+
+	@Mock
+	private EmojiInterpreter emoji;
 	
 	@BeforeEach
 	public void setUp() {
-		this.entry = new MessageHandler(this.bot, this.enrich);
+		this.entry = new MessageHandler(this.bot, this.enrich, this.emoji);
 	}
 	
 	@Test
@@ -50,12 +53,27 @@ public class MessageHandlerTest {
 		enriched.response("Hey!");
 		when(this.enrich.message(entry)).thenReturn(enriched);
 		
-		ResponseMessage result = this.entry.handle(entry);
 		ResponseMessage message = new ResponseMessage(1L, "Hey!");
+		when(this.emoji.interpret(message)).thenReturn(message);
+		
+		ResponseMessage result = this.entry.handle(entry);
+		
+		assertThat(result).isEqualTo(message);
+		verify(this.bot).send(message);
+	}
+	
+	@Test
+	public void should_not_send_null_message() {
+		EntryMessage entry = new EntryMessage(1L, "Hi!");
+		EnrichedMessage enriched = new EnrichedMessage(entry);
+		when(this.enrich.message(entry)).thenReturn(enriched);
+		
+		ResponseMessage result = this.entry.handle(entry);
+		ResponseMessage message = new ResponseMessage(1L, null);
 		
 		assertThat(result).isEqualTo(message);
 		
-		verify(this.bot).send(message);
+		verify(this.bot, never()).send(message);
 	}
 
 }

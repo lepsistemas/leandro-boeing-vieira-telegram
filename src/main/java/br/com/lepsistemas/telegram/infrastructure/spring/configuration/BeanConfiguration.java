@@ -9,11 +9,12 @@ import com.ibm.watson.assistant.v2.Assistant;
 import com.pengrad.telegrambot.TelegramBot;
 
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
+import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
 import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
 import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
 import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingEnrichment;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
-import br.com.lepsistemas.telegram.infrastructure.telegram.watson.WatsonAssistant;
+import br.com.lepsistemas.telegram.infrastructure.watson.WatsonAssistant;
 
 @Configuration
 public class BeanConfiguration {
@@ -29,9 +30,14 @@ public class BeanConfiguration {
 	
 	@Bean
 	public MessageHandler entryUpdate() {
-		return new MessageHandler(chatBot(), entryMessageEnrichment());
+		return new MessageHandler(chatBot(), entryMessageEnrichment(), emojiInterpreter());
 	}
 	
+	@Bean
+	public EmojiInterpreter emojiInterpreter() {
+		return new EmojiInterpreter();
+	}
+
 	@Bean
 	public EntryMessageEnrichment entryMessageEnrichment() {
 		return new EntryMessageEnrichment(nlpEnrichment());

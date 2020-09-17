@@ -10,10 +10,12 @@ public class MessageHandler {
 	
 	private Bot bot;
 	private EntryMessageEnrichment enrich;
+	private EmojiInterpreter emoji;
 	
-	public MessageHandler(Bot bot, EntryMessageEnrichment enrich) {
+	public MessageHandler(Bot bot, EntryMessageEnrichment enrich, EmojiInterpreter emoji) {
 		this.bot = bot;
 		this.enrich = enrich;
+		this.emoji = emoji;
 	}
 
 	public ResponseMessage handle(EntryMessage entry) {
@@ -26,8 +28,10 @@ public class MessageHandler {
 		// For now I'm only returning what the user typed
 		
 		ResponseMessage message = new ResponseMessage(entry.id(), enriched.response());
+		ResponseMessage messageWithEmoji = this.emoji.interpret(message);
+		
 		if (message.text() != null) {
-			this.bot.send(message);
+			this.bot.send(messageWithEmoji);
 		}
 		
 		return message;
