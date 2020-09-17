@@ -8,3 +8,5 @@ watson:
     id: ${WATSON_ASSISTANT_ID}
   nlu:
     key: ${WATSON_NLU_KEY}
+    
+annotators: tokenize,cleanxml,ssplit,pos,lemma,ner,parse,depparse,coref,natlog,openie,kbp,entitylink
