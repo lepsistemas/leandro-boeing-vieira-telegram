@@ -1,13 +1,17 @@
 package br.com.lepsistemas.telegram.infrastructure.telegram.watson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.assistant.v2.model.DeleteSessionOptions;
+import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageInput;
+import com.ibm.watson.assistant.v2.model.MessageInputOptions;
 import com.ibm.watson.assistant.v2.model.MessageOptions;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
 import com.ibm.watson.assistant.v2.model.RuntimeResponseGeneric;
@@ -22,16 +26,27 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 	private String assistantId;
 	private Assistant service;
 	
+	private Map<Long, MessageContext> contexts;
+	
 	public WatsonAssistant(String assistantId, Assistant service) {
 		this.assistantId = assistantId;
 		this.service = service;
+		this.contexts = new HashMap<>();
 	}
 
 	@Override
 	public EnrichedMessage understand(EntryMessage entry) {
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		
-		MessageInput input = new MessageInput.Builder().text(entry.text()).build();
+		MessageContext context = this.contexts.get(entry.id());
+		if (context == null) {
+			context = new MessageContext.Builder().build();
+		}
+		
+		MessageInput input = new MessageInput.Builder()
+				.text(entry.text())
+				.options(new MessageInputOptions.Builder().returnContext(true).build())
+				.build();
 		
 		String sessionId = createSession();
 		
@@ -39,9 +54,13 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 				  .assistantId(this.assistantId)
 				  .sessionId(sessionId)
 				  .input(input)
+				  .context(context)
 				  .build();
 		
 		MessageResponse response = this.service.message(messageOptions).execute().getResult();
+		
+		context = response.getContext();
+		this.contexts.put(entry.id(), context);
 		
 		enriched.response(this.randomResponse(response));
 		
@@ -78,5 +97,5 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 	    String sessionId = session.getSessionId();
 		return sessionId;
 	}
-
+	
 }

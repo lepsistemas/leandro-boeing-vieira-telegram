@@ -44,7 +44,7 @@ public class BeanConfiguration {
 	
 	@Bean
 	public Assistant watsonService() {
-		return new Assistant("2019-02-28", new IamAuthenticator(this.watsonAssistantKey));
+		return new Assistant("2020-04-01", new IamAuthenticator(this.watsonAssistantKey));
 	}
 
 	@Bean
