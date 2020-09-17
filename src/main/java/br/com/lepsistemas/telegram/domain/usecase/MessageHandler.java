@@ -21,25 +21,25 @@ public class MessageHandler {
 	}
 
 	public ResponseMessage handle(EntryMessage entry) {
-		MessageHandler.log.info("--- ChatId: {} - {} ---", entry.id(), entry);
+		MessageHandler.log.info("--- {} ---", entry);
 		if (entry.text().startsWith(COMMAND_BOT_STARTING_TEXT)) {
 			return null;
 		}
 		EnrichedMessage enriched = this.enrich.message(entry);
-		MessageHandler.log.info("--- ChatId: {} - {} ---", enriched.entry().id(), enriched);
+		MessageHandler.log.info("--- {} ---", enriched);
 		
 		// Depending on the enriched message, I would like to answer accordingly
 		// For now I'm only returning what the user typed
 		
 		ResponseMessage message = new ResponseMessage(entry.id(), enriched.response());
-		MessageHandler.log.info("--- ChatId: {} - {} ---", message.id(), message);
+		MessageHandler.log.info("--- {} ---", message);
+		
 		ResponseMessage messageWithEmoji = this.emoji.interpret(message);
-		MessageHandler.log.info("--- ChatId: {} - {} ---", message.id(), message);
+		MessageHandler.log.info("--- {} ---", messageWithEmoji);
 		
 		if (message.text() != null) {
-			MessageHandler.log.info("--- Sending... ChatId: {} - {} ---", message.id(), message);
-			ResponseMessage lep = new ResponseMessage(message.id(), "Restar!");
-			this.bot.send(lep);
+			MessageHandler.log.info("--- Sending... {} ---", messageWithEmoji);
+			this.bot.send(messageWithEmoji);
 		}
 		
 		return message;
