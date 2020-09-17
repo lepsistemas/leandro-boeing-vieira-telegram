@@ -1,8 +1,10 @@
 package br.com.lepsistemas.telegram.domain.model;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @EqualsAndHashCode
+@ToString
 public class EntryMessage {
 	
 	private Long id;
