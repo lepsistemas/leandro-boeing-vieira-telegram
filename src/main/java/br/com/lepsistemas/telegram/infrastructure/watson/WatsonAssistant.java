@@ -74,8 +74,11 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 	}
 
 	private void extractContext(EnrichedMessage enriched, MessageContext messageContext) {
-		for(Entry<String, Object> context : messageContext.skills().get("main skill").userDefined().entrySet()) {
-			enriched.addContext(context.getKey(), context.getValue());
+		Map<String, Object> userDefined = messageContext.skills().get("main skill").userDefined();
+		if (userDefined != null) {
+			for(Entry<String, Object> context : userDefined.entrySet()) {
+				enriched.addContext(context.getKey(), context.getValue());
+			}
 		}
 	}
 

@@ -12,7 +12,7 @@ public class EntryMessageEnrichment {
 	}
 	
 	public EnrichedMessage message(EntryMessage entry) {
-		String normalizedText = entry.text().replaceAll("\n", "").replaceAll("\r", "").trim();
+		String normalizedText = entry.text().replaceAll("\n", " ").replaceAll("\r", " ").trim();
 		
 		EntryMessage normalizedEntry = new EntryMessage(entry.id(), normalizedText);
 		EnrichedMessage enrichedEntry = this.nlpEnrichment.understand(normalizedEntry);

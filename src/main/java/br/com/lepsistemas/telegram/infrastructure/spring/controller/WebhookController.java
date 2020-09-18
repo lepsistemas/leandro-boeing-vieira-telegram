@@ -33,7 +33,7 @@ public class WebhookController {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> exception(Exception e) {
-		WebhookController.log.error("--- Error: {} ---", e.getMessage());
+		WebhookController.log.error("--- Error: {} {} ---", e.getCause(), e.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
