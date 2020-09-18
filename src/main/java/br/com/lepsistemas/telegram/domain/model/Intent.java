@@ -14,5 +14,13 @@ public class Intent {
 		this.value = value;
 		this.confidence = confidence;
 	}
+	
+	public String value() {
+		return this.value;
+	}
+	
+	public Double confidence() {
+		return this.confidence;
+	}
 
 }

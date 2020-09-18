@@ -14,5 +14,13 @@ public class Context {
 		this.key = key;
 		this.value = value;
 	}
+	
+	public String key() {
+		return this.key;
+	}
+	
+	public Object value() {
+		return this.value;
+	}
 
 }

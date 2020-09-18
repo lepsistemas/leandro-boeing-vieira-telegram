@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.assistant.v2.model.DeleteSessionOptions;
@@ -83,15 +84,17 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 	}
 
 	private void extractIntents(EnrichedMessage enriched, MessageResponse messageResponse) {
-		for(RuntimeIntent intent :messageResponse.getOutput().getIntents()) {
-			enriched.addIntent(intent.intent(), intent.confidence());
+		if (messageResponse.getOutput() != null) {
+			for(RuntimeIntent intent : messageResponse.getOutput().getIntents()) {
+				enriched.addIntent(intent.intent(), intent.confidence());
+			}
 		}
 	}
 
-	private void extractResponse(EnrichedMessage enriched, MessageResponse response) {
+	private void extractResponse(EnrichedMessage enriched, MessageResponse messageResponse) {
 		List<String> responses = new ArrayList<>();
-		if (response.getOutput() != null && response.getOutput().getGeneric() != null) {
-			for (RuntimeResponseGeneric generic : response.getOutput().getGeneric()) {
+		if (messageResponse.getOutput() != null && messageResponse.getOutput().getGeneric() != null) {
+			for (RuntimeResponseGeneric generic : messageResponse.getOutput().getGeneric()) {
 				if ("text".equals(generic.responseType())) {
 					responses.add(generic.text());
 				}
@@ -110,7 +113,8 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 
 	private String createSession() {
 		CreateSessionOptions createSessionOptions = new CreateSessionOptions.Builder(assistantId).build();
-	    SessionResponse session = this.service.createSession(createSessionOptions).execute().getResult();
+	    ServiceCall<SessionResponse> createSession = this.service.createSession(createSessionOptions);
+		SessionResponse session = createSession.execute().getResult();
 	    String sessionId = session.getSessionId();
 		return sessionId;
 	}
