@@ -15,8 +15,10 @@ import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
 import br.com.lepsistemas.telegram.infrastructure.convert.UpdateToEntryMessage;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 public class WebhookController {
 	
 	private MessageHandler entry;
@@ -30,7 +32,8 @@ public class WebhookController {
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> exception() {
+	public ResponseEntity<String> exception(Exception e) {
+		WebhookController.log.error("--- Error: {} ---", e.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
