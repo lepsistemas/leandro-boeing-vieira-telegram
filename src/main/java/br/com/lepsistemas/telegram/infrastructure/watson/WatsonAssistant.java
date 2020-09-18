@@ -95,7 +95,9 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 			}
 		}
 		
-		enriched.response(responses.get(new Random().nextInt(responses.size())));
+		if (!responses.isEmpty()) {
+			enriched.response(responses.get(new Random().nextInt(responses.size())));
+		}
 	}
 
 	private void deleteSession(String sessionId) {
