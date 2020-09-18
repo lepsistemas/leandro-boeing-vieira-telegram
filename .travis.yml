@@ -1,0 +1,14 @@
+language: java
+jdk:
+  - oraclejdk8
+before_install:
+  - chmod +x gradlew
+  - chmod +x gradle/wrapper/gradle-wrapper.jar
+script:
+  - ./gradlew clean
+  - ./gradlew check
+  - ./gradlew codeCoverageReport
+after_success:
+  - ./gradlew build
+  - ./gradlew test
+  - bash <(curl -s https://codecov.io/bash)
