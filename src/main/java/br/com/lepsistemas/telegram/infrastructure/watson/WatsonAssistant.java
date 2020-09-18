@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import com.ibm.watson.assistant.v2.Assistant;
@@ -14,6 +15,7 @@ import com.ibm.watson.assistant.v2.model.MessageInput;
 import com.ibm.watson.assistant.v2.model.MessageInputOptions;
 import com.ibm.watson.assistant.v2.model.MessageOptions;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
+import com.ibm.watson.assistant.v2.model.RuntimeIntent;
 import com.ibm.watson.assistant.v2.model.RuntimeResponseGeneric;
 import com.ibm.watson.assistant.v2.model.SessionResponse;
 
@@ -38,12 +40,12 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 	public EnrichedMessage understand(EntryMessage entry) {
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		
-		MessageContext context = this.contexts.get(entry.id());
-		if (context == null) {
-			context = new MessageContext.Builder().build();
+		MessageContext messageContext = this.contexts.get(entry.id());
+		if (messageContext == null) {
+			messageContext = new MessageContext.Builder().build();
 		}
 		
-		MessageInput input = new MessageInput.Builder()
+		MessageInput messageInput = new MessageInput.Builder()
 				.text(entry.text())
 				.options(new MessageInputOptions.Builder().returnContext(true).build())
 				.build();
@@ -53,23 +55,37 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 		MessageOptions messageOptions = new MessageOptions.Builder()
 				  .assistantId(this.assistantId)
 				  .sessionId(sessionId)
-				  .input(input)
-				  .context(context)
+				  .input(messageInput)
+				  .context(messageContext)
 				  .build();
 		
-		MessageResponse response = this.service.message(messageOptions).execute().getResult();
+		MessageResponse messageResponse = this.service.message(messageOptions).execute().getResult();
 		
-		context = response.getContext();
-		this.contexts.put(entry.id(), context);
+		messageContext = messageResponse.getContext();
+		this.contexts.put(entry.id(), messageContext);
 		
-		enriched.response(this.randomResponse(response));
+		this.extractResponse(enriched, messageResponse);
+		this.extractIntents(enriched, messageResponse);
+		this.extractContext(enriched, messageContext);
 		
 		deleteSession(sessionId);
 		
 		return enriched;
 	}
-	
-	private String randomResponse(MessageResponse response) {
+
+	private void extractContext(EnrichedMessage enriched, MessageContext messageContext) {
+		for(Entry<String, Object> context : messageContext.skills().get("main skill").userDefined().entrySet()) {
+			enriched.addContext(context.getKey(), context.getValue());
+		}
+	}
+
+	private void extractIntents(EnrichedMessage enriched, MessageResponse messageResponse) {
+		for(RuntimeIntent intent :messageResponse.getOutput().getIntents()) {
+			enriched.addIntent(intent.intent(), intent.confidence());
+		}
+	}
+
+	private void extractResponse(EnrichedMessage enriched, MessageResponse response) {
 		List<String> responses = new ArrayList<>();
 		if (response.getOutput() != null && response.getOutput().getGeneric() != null) {
 			for (RuntimeResponseGeneric generic : response.getOutput().getGeneric()) {
@@ -79,11 +95,7 @@ public class WatsonAssistant implements NaturalLanguageProcessingEnrichment {
 			}
 		}
 		
-		if (responses.isEmpty()) {
-			return null;
-		}
-		
-		return responses.get(new Random().nextInt(responses.size()));
+		enriched.response(responses.get(new Random().nextInt(responses.size())));
 	}
 
 	private void deleteSession(String sessionId) {
