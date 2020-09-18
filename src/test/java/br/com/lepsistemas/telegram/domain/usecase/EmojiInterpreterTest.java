@@ -12,10 +12,10 @@ public class EmojiInterpreterTest {
 	public void should_replace_emoji() {
 		EmojiInterpreter emoji = new EmojiInterpreter();
 		
-		ResponseMessage message = new ResponseMessage(1L, "Hi :)");
+		ResponseMessage message = new ResponseMessage(1L, "Hi ;)");
 		ResponseMessage result = emoji.interpret(message);
 		
-		assertThat(result.text()).isEqualTo("Hi \u1F609");
+		assertThat(result.text()).isEqualTo("Hi 😉");
 	}
 
 }

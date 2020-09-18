@@ -12,7 +12,7 @@ public class EmojiInterpreter {
 	
 	public EmojiInterpreter() {
 		this.emojis = new HashMap<>();
-		this.emojis.put(":\\)", "\u1F609");
+		this.emojis.put(";\\)", "😉");
 	}
 
 	public ResponseMessage interpret(ResponseMessage message) {

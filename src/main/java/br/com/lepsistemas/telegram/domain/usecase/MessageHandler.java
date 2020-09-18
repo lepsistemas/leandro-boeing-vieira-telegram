@@ -34,12 +34,12 @@ public class MessageHandler {
 		ResponseMessage message = new ResponseMessage(entry.id(), enriched.response());
 		MessageHandler.log.info("--- {} ---", message);
 		
-//		ResponseMessage messageWithEmoji = this.emoji.interpret(message);
-//		MessageHandler.log.info("--- {} ---", messageWithEmoji);
+		ResponseMessage messageWithEmoji = this.emoji.interpret(message);
+		MessageHandler.log.info("--- {} ---", messageWithEmoji);
 		
 		if (message.text() != null) {
-			MessageHandler.log.info("--- Sending... {} ---", message);
-			this.bot.send(message);
+			MessageHandler.log.info("--- Sending... {} ---", messageWithEmoji);
+			this.bot.send(messageWithEmoji);
 		}
 		
 		return message;
