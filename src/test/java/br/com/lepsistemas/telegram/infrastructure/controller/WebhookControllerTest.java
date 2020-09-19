@@ -54,5 +54,12 @@ public class WebhookControllerTest {
 		
 		assertThat(result.getBody()).isNull();
 	}
+	
+	@Test
+	public void should_return_ok_even_with_exception() {
+		ResponseEntity<String> result = this.controller.exception(new RuntimeException("Runtime Exception"));
+		
+		assertThat(result.getBody()).isNull();
+	}
 
 }

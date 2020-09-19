@@ -34,6 +34,7 @@ public class EntryMessageEnrichmentTest {
 		EnrichedMessage result = this.enrichment.message(entry);
 		
 		assertThat(result).isEqualTo(enriched);
+		assertThat(result.entry()).isEqualTo(enriched.entry());
 	}
 
 }
