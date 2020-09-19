@@ -26,12 +26,23 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	excludes = ['**/*Application.java']
 }
+
+def jacocoExclude = ['**/*Application.class']
 
 jacocoTestReport {
     reports {
         xml.enabled true
-        html.enabled false
+        html.enabled true
+    }
+    
+    afterEvaluate {
+        afterEvaluate {
+            getClassDirectories().setFrom(classDirectories.files.collect {
+                fileTree(dir: it, exclude: jacocoExclude)
+            })
+        }
     }
 }
 
