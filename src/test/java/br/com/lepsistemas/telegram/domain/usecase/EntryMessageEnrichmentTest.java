@@ -11,8 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
-import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
-import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingService;
 
 @ExtendWith(MockitoExtension.class)
 public class EntryMessageEnrichmentTest {

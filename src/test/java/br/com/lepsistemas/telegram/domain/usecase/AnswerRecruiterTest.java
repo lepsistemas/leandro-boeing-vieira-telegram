@@ -15,10 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
-import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
-import br.com.lepsistemas.telegram.domain.usecase.Bot;
-import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
-import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
 
 @ExtendWith(MockitoExtension.class)
 public class AnswerRecruiterTest {
@@ -58,7 +54,7 @@ public class AnswerRecruiterTest {
 		when(this.enrich.message(entry)).thenReturn(enriched);
 		
 		ResponseMessage message = new ResponseMessage(1L, "Hey!");
-		when(this.emoji.interpret(message)).thenReturn(message);
+		when(this.emoji.interpolate(message)).thenReturn(message);
 		
 		ResponseMessage result = this.entry.to(entry);
 		

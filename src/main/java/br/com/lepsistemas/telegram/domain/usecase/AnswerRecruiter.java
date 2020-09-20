@@ -33,7 +33,7 @@ public class AnswerRecruiter {
 		ResponseMessage message = new ResponseMessage(entry.id(), enriched.response());
 		AnswerRecruiter.log.info("--- Response: {} ---", message);
 		
-		ResponseMessage messageWithEmoji = this.emoji.interpret(message);
+		ResponseMessage messageWithEmoji = this.emoji.interpolate(message);
 		AnswerRecruiter.log.info("--- Emoji Response: {} ---", messageWithEmoji);
 		
 		if (message.text() != null) {
