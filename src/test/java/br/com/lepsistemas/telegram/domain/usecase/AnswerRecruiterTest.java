@@ -15,11 +15,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
+import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
+import br.com.lepsistemas.telegram.domain.usecase.Bot;
+import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
+import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
 
 @ExtendWith(MockitoExtension.class)
-public class MessageHandlerTest {
+public class AnswerRecruiterTest {
 	
-	private MessageHandler entry;
+	private AnswerRecruiter entry;
 	
 	@Mock
 	private Bot bot;
@@ -32,13 +36,13 @@ public class MessageHandlerTest {
 	
 	@BeforeEach
 	public void setUp() {
-		this.entry = new MessageHandler(this.bot, this.enrich, this.emoji);
+		this.entry = new AnswerRecruiter(this.bot, this.enrich, this.emoji);
 	}
 	
 	@Test
 	public void should_just_return_when_message_is_start() {
 		EntryMessage entry = new EntryMessage(1L, "/start");
-		ResponseMessage result = this.entry.handle(entry);
+		ResponseMessage result = this.entry.to(entry);
 		
 		assertThat(result).isNull();
 		
@@ -56,7 +60,7 @@ public class MessageHandlerTest {
 		ResponseMessage message = new ResponseMessage(1L, "Hey!");
 		when(this.emoji.interpret(message)).thenReturn(message);
 		
-		ResponseMessage result = this.entry.handle(entry);
+		ResponseMessage result = this.entry.to(entry);
 		
 		assertThat(result).isEqualTo(message);
 		verify(this.bot).send(message);
@@ -68,7 +72,7 @@ public class MessageHandlerTest {
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		when(this.enrich.message(entry)).thenReturn(enriched);
 		
-		ResponseMessage result = this.entry.handle(entry);
+		ResponseMessage result = this.entry.to(entry);
 		ResponseMessage message = new ResponseMessage(1L, null);
 		
 		assertThat(result).isEqualTo(message);

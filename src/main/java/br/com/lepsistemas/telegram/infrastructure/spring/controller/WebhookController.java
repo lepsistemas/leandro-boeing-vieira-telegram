@@ -13,7 +13,7 @@ import com.pengrad.telegrambot.model.Update;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
-import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
+import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.infrastructure.convert.UpdateToEntryMessage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebhookController {
 	
-	private MessageHandler entry;
+	private AnswerRecruiter entry;
 	
 	@PostMapping("/webhook")
 	public ResponseEntity<String> webhook(@RequestBody String body) {
 		Update update = BotUtils.parseUpdate(body);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
-		ResponseMessage response = this.entry.handle(message);
+		ResponseMessage response = this.entry.to(message);
 		return ResponseEntity.status(HttpStatus.OK).body(response != null ? response.text() : null);
 	}
 	
@@ -38,7 +38,7 @@ public class WebhookController {
 	}
 	
 	@Autowired
-	public void setEntryUpdate(MessageHandler entry) {
+	public void setEntryUpdate(AnswerRecruiter entry) {
 		this.entry = entry;
 	}
 	

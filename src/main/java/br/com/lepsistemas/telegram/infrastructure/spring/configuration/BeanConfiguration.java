@@ -8,11 +8,11 @@ import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.pengrad.telegrambot.TelegramBot;
 
+import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
 import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
 import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
-import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
-import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingEnrichment;
+import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingService;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
 import br.com.lepsistemas.telegram.infrastructure.watson.WatsonAssistant;
 
@@ -29,8 +29,8 @@ public class BeanConfiguration {
 	private String watsonAssistantId;
 	
 	@Bean
-	public MessageHandler entryUpdate() {
-		return new MessageHandler(chatBot(), entryMessageEnrichment(), emojiInterpreter());
+	public AnswerRecruiter answerRecruiter(Bot bot, EntryMessageEnrichment entryMessageEnrichment, EmojiInterpreter emojiInterpreter) {
+		return new AnswerRecruiter(bot, entryMessageEnrichment, emojiInterpreter);
 	}
 	
 	@Bean
@@ -39,12 +39,12 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	public EntryMessageEnrichment entryMessageEnrichment() {
-		return new EntryMessageEnrichment(nlpEnrichment());
+	public EntryMessageEnrichment entryMessageEnrichment(NaturalLanguageProcessingService nlpService) {
+		return new EntryMessageEnrichment(nlpService);
 	}
 	
 	@Bean
-	public NaturalLanguageProcessingEnrichment nlpEnrichment() {
+	public NaturalLanguageProcessingService nlpService() {
 		return new WatsonAssistant(this.watsonAssistantId, watsonService());
 	}
 	
@@ -54,7 +54,7 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	public Bot chatBot() {
+	public Bot bot() {
 		return new ChatBot();
 	}
 	

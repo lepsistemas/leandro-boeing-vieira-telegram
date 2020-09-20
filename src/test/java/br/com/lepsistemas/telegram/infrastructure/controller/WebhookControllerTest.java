@@ -15,7 +15,7 @@ import com.pengrad.telegrambot.model.Update;
 
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
-import br.com.lepsistemas.telegram.domain.usecase.MessageHandler;
+import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.infrastructure.convert.UpdateToEntryMessage;
 import br.com.lepsistemas.telegram.infrastructure.spring.controller.WebhookController;
 
@@ -25,7 +25,7 @@ public class WebhookControllerTest {
 	private WebhookController controller;
 	
 	@Mock
-	private MessageHandler entry;
+	private AnswerRecruiter entry;
 	
 	@BeforeEach
 	public void setUp() {
@@ -39,7 +39,7 @@ public class WebhookControllerTest {
 		Update update = BotUtils.parseUpdate(request);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		ResponseMessage response = new ResponseMessage(1L, "Hi!");
-		when(this.entry.handle(message)).thenReturn(response);
+		when(this.entry.to(message)).thenReturn(response);
 		
 		ResponseEntity<String> result = this.controller.webhook(request);
 		

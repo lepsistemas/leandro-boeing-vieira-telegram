@@ -5,9 +5,9 @@ import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 
 public class EntryMessageEnrichment {
 	
-	private NaturalLanguageProcessingEnrichment nlpEnrichment;
+	private NaturalLanguageProcessingService nlpEnrichment;
 
-	public EntryMessageEnrichment(NaturalLanguageProcessingEnrichment nlpEnrichment) {
+	public EntryMessageEnrichment(NaturalLanguageProcessingService nlpEnrichment) {
 		this.nlpEnrichment = nlpEnrichment;
 	}
 	

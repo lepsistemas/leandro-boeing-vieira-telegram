@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
+import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
 
 public class EmojiInterpreterTest {
 	
