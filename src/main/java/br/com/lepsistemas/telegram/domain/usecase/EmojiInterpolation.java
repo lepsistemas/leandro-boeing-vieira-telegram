@@ -13,6 +13,7 @@ public class EmojiInterpolation {
 	public EmojiInterpolation() {
 		this.emojis = new HashMap<>();
 		this.emojis.put(";\\)", "😉");
+		this.emojis.put(";\'\\(", "😥");
 	}
 
 	public ResponseMessage interpolate(ResponseMessage message) {

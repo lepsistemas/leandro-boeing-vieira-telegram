@@ -9,13 +9,13 @@ import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 public class EmojiInterpolationTest {
 	
 	@Test
-	public void should_replace_emoji() {
+	public void should_replace_emojis() {
 		EmojiInterpolation emoji = new EmojiInterpolation();
 		
-		ResponseMessage message = new ResponseMessage(1L, "Hi ;)");
+		ResponseMessage message = new ResponseMessage(1L, "Hi ;) ;'(");
 		ResponseMessage result = emoji.interpolate(message);
 		
-		assertThat(result.text()).isEqualTo("Hi 😉");
+		assertThat(result.text()).isEqualTo("Hi 😉 😥");
 	}
 
 }
