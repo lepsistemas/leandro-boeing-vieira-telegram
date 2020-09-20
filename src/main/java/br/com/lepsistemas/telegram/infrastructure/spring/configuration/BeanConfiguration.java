@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.pengrad.telegrambot.TelegramBot;
@@ -44,13 +45,18 @@ public class BeanConfiguration {
 	}
 	
 	@Bean
-	public NaturalLanguageProcessingService nlpService() {
-		return new WatsonAssistant(this.watsonAssistantId, watsonService());
+	public NaturalLanguageProcessingService nlpService(Assistant assistant) {
+		return new WatsonAssistant(this.watsonAssistantId, assistant);
 	}
 	
 	@Bean
-	public Assistant watsonService() {
-		return new Assistant("2020-04-01", new IamAuthenticator(this.watsonAssistantKey));
+	public Authenticator authenticator() {
+		return new IamAuthenticator(this.watsonAssistantKey);
+	}
+	
+	@Bean
+	public Assistant watsonService(Authenticator authenticator) {
+		return new Assistant("2020-04-01", authenticator);
 	}
 
 	@Bean
