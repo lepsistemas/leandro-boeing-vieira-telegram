@@ -17,7 +17,7 @@ import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
-import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
+import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
 import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +32,7 @@ public class AnswerRecruiterTest {
 	private EntryMessageEnrichment enrich;
 
 	@Mock
-	private EmojiInterpreter emoji;
+	private EmojiInterpolation emoji;
 	
 	@BeforeEach
 	public void setUp() {

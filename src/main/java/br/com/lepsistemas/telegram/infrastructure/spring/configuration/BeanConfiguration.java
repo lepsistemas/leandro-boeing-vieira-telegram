@@ -10,7 +10,7 @@ import com.pengrad.telegrambot.TelegramBot;
 
 import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
-import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
+import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
 import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
 import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingService;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
@@ -29,13 +29,13 @@ public class BeanConfiguration {
 	private String watsonAssistantId;
 	
 	@Bean
-	public AnswerRecruiter answerRecruiter(Bot bot, EntryMessageEnrichment entryMessageEnrichment, EmojiInterpreter emojiInterpreter) {
+	public AnswerRecruiter answerRecruiter(Bot bot, EntryMessageEnrichment entryMessageEnrichment, EmojiInterpolation emojiInterpreter) {
 		return new AnswerRecruiter(bot, entryMessageEnrichment, emojiInterpreter);
 	}
 	
 	@Bean
-	public EmojiInterpreter emojiInterpreter() {
-		return new EmojiInterpreter();
+	public EmojiInterpolation emojiInterpreter() {
+		return new EmojiInterpolation();
 	}
 
 	@Bean

@@ -6,17 +6,16 @@ import java.util.Map.Entry;
 
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
-public class EmojiInterpreter {
+public class EmojiInterpolation {
 	
 	private Map<String, String> emojis;
 	
-	public EmojiInterpreter() {
+	public EmojiInterpolation() {
 		this.emojis = new HashMap<>();
 		this.emojis.put(";\\)", "😉");
 	}
 
-	public ResponseMessage interpret(ResponseMessage message) {
-		
+	public ResponseMessage interpolate(ResponseMessage message) {
 		String text = message.text();
 		for(Entry<String, String> emoji : this.emojis.entrySet()) {
 			text = text.replaceAll(emoji.getKey(), emoji.getValue());

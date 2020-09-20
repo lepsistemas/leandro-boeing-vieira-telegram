@@ -5,13 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
-import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpreter;
+import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
 
-public class EmojiInterpreterTest {
+public class EmojiInterpolationTest {
 	
 	@Test
 	public void should_replace_emoji() {
-		EmojiInterpreter emoji = new EmojiInterpreter();
+		EmojiInterpolation emoji = new EmojiInterpolation();
 		
 		ResponseMessage message = new ResponseMessage(1L, "Hi ;)");
 		ResponseMessage result = emoji.interpret(message);

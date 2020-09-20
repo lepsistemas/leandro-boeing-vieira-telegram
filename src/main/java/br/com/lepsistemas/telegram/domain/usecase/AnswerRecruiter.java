@@ -12,9 +12,9 @@ public class AnswerRecruiter {
 	
 	private Bot bot;
 	private EntryMessageEnrichment enrich;
-	private EmojiInterpreter emoji;
+	private EmojiInterpolation emoji;
 	
-	public AnswerRecruiter(Bot bot, EntryMessageEnrichment enrich, EmojiInterpreter emoji) {
+	public AnswerRecruiter(Bot bot, EntryMessageEnrichment enrich, EmojiInterpolation emoji) {
 		this.bot = bot;
 		this.enrich = enrich;
 		this.emoji = emoji;
