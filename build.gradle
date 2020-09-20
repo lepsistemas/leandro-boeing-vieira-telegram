@@ -19,6 +19,7 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	testImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
 	compile 'com.github.pengrad:java-telegram-bot-api:4.9.0'
 	compile 'com.ibm.watson:assistant:8.6.0'
 	compileOnly 'org.projectlombok:lombok:1.18.12'
@@ -51,3 +52,18 @@ check.dependsOn jacocoTestReport
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
+
+sourceSets {
+    architectureTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/test/architecture')
+        }
+    }
+}
+
+task architectureTest(type: Test) {
+    testClassesDirs = sourceSets.architectureTest.output.classesDirs
+    classpath = sourceSets.architectureTest.runtimeClasspath
+} 
