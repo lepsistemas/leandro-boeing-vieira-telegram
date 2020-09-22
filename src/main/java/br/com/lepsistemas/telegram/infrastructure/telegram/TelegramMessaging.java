@@ -6,9 +6,9 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
-import br.com.lepsistemas.telegram.domain.usecase.Bot;
+import br.com.lepsistemas.telegram.domain.usecase.Messaging;
 
-public class ChatBot implements Bot {
+public class TelegramMessaging implements Messaging {
 	
 	private TelegramBot bot;
 

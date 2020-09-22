@@ -22,7 +22,7 @@ public class AnswerRecruiterTest {
 	private AnswerRecruiter entry;
 	
 	@Mock
-	private Bot bot;
+	private Messaging bot;
 	
 	@Mock
 	private NaturalLanguageProcessing nlp;

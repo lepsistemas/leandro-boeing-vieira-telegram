@@ -10,10 +10,10 @@ import com.ibm.watson.assistant.v2.Assistant;
 import com.pengrad.telegrambot.TelegramBot;
 
 import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
-import br.com.lepsistemas.telegram.domain.usecase.Bot;
+import br.com.lepsistemas.telegram.domain.usecase.Messaging;
 import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
 import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
-import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
+import br.com.lepsistemas.telegram.infrastructure.telegram.TelegramMessaging;
 import br.com.lepsistemas.telegram.infrastructure.telegram.UnicodeEmojiInterpolation;
 import br.com.lepsistemas.telegram.infrastructure.watson.WatsonAssistant;
 
@@ -30,7 +30,7 @@ public class BeanConfiguration {
 	private String watsonAssistantId;
 	
 	@Bean
-	public AnswerRecruiter answerRecruiter(Bot bot, NaturalLanguageProcessing nlp, EmojiInterpolation emojiInterpolation) {
+	public AnswerRecruiter answerRecruiter(Messaging bot, NaturalLanguageProcessing nlp, EmojiInterpolation emojiInterpolation) {
 		return new AnswerRecruiter(bot, nlp, emojiInterpolation);
 	}
 	
@@ -55,8 +55,8 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	public Bot bot() {
-		return new ChatBot();
+	public Messaging bot() {
+		return new TelegramMessaging();
 	}
 	
 	@Bean

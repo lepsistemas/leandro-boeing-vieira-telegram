@@ -10,11 +10,11 @@ public class AnswerRecruiter {
 	
 	private static final String COMMAND_BOT_STARTING_TEXT = "/";
 	
-	private Bot bot;
+	private Messaging bot;
 	private NaturalLanguageProcessing nlp;
 	private EmojiInterpolation emoji;
 	
-	public AnswerRecruiter(Bot bot, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
+	public AnswerRecruiter(Messaging bot, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
 		this.bot = bot;
 		this.nlp = nlp;
 		this.emoji = emoji;

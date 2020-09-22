@@ -15,16 +15,16 @@ import com.pengrad.telegrambot.request.SendMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 @ExtendWith(MockitoExtension.class)
-public class ChatBotTest {
+public class TelegramMessagingTest {
 	
-	private ChatBot bot;
+	private TelegramMessaging bot;
 	
 	@Mock
 	private TelegramBot telegram;
 	
 	@BeforeEach
 	public void setUp() {
-		this.bot = new ChatBot();
+		this.bot = new TelegramMessaging();
 		this.bot.setBot(telegram);
 	}
 	
