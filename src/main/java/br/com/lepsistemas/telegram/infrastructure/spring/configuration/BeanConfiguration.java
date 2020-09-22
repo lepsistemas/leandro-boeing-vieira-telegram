@@ -20,6 +20,8 @@ import br.com.lepsistemas.telegram.infrastructure.watson.WatsonAssistant;
 @Configuration
 public class BeanConfiguration {
 	
+	private static final String WATSON_ASSISTANT_VERSION = "2020-04-01";
+
 	@Value("${telegram.bot.token}")
 	private String telegramBotToken;
 	
@@ -35,12 +37,7 @@ public class BeanConfiguration {
 	}
 	
 	@Bean
-	public EmojiInterpolation emojiInterpreter() {
-		return new UnicodeEmojiInterpolation();
-	}
-	
-	@Bean
-	public NaturalLanguageProcessing nlpService(Assistant assistant) {
+	public NaturalLanguageProcessing nlp(Assistant assistant) {
 		return new WatsonAssistant(this.watsonAssistantId, assistant);
 	}
 	
@@ -50,18 +47,23 @@ public class BeanConfiguration {
 	}
 	
 	@Bean
-	public Assistant watsonService(Authenticator authenticator) {
-		return new Assistant("2020-04-01", authenticator);
-	}
-
-	@Bean
-	public Messaging bot() {
-		return new TelegramMessaging();
+	public Assistant assistant(Authenticator authenticator) {
+		return new Assistant(WATSON_ASSISTANT_VERSION, authenticator);
 	}
 	
 	@Bean
 	public TelegramBot telegramBot() {
 		return new TelegramBot(this.telegramBotToken);
+	}
+
+	@Bean
+	public Messaging messaging() {
+		return new TelegramMessaging();
+	}
+	
+	@Bean
+	public EmojiInterpolation emojiInterpolation() {
+		return new UnicodeEmojiInterpolation();
 	}
 
 }
