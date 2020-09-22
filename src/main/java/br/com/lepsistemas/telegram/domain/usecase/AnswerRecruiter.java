@@ -11,12 +11,12 @@ public class AnswerRecruiter {
 	private static final String COMMAND_BOT_STARTING_TEXT = "/";
 	
 	private Bot bot;
-	private EntryMessageEnrichment enrich;
+	private NaturalLanguageProcessing nlp;
 	private EmojiInterpolation emoji;
 	
-	public AnswerRecruiter(Bot bot, EntryMessageEnrichment enrich, EmojiInterpolation emoji) {
+	public AnswerRecruiter(Bot bot, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
 		this.bot = bot;
-		this.enrich = enrich;
+		this.nlp = nlp;
 		this.emoji = emoji;
 	}
 
@@ -25,7 +25,9 @@ public class AnswerRecruiter {
 		if (entry.text().startsWith(COMMAND_BOT_STARTING_TEXT)) {
 			return null;
 		}
-		EnrichedMessage enriched = this.enrich.message(entry);
+		
+		EntryMessage normalizedEntry = new EntryMessage(entry.id(), entry.text().replaceAll("\n", " ").replaceAll("\r", " ").trim());
+		EnrichedMessage enriched = this.nlp.understand(normalizedEntry);
 		AnswerRecruiter.log.info("--- Enriched: {} ---", enriched);
 		
 		// Depending on the enriched message, I would like to answer accordingly

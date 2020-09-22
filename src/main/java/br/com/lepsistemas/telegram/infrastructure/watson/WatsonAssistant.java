@@ -22,9 +22,9 @@ import com.ibm.watson.assistant.v2.model.SessionResponse;
 
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
-import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingService;
+import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
 
-public class WatsonAssistant implements NaturalLanguageProcessingService {
+public class WatsonAssistant implements NaturalLanguageProcessing {
 
 	private String assistantId;
 	private Assistant service;

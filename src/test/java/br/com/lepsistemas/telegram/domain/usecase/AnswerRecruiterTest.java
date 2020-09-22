@@ -25,14 +25,14 @@ public class AnswerRecruiterTest {
 	private Bot bot;
 	
 	@Mock
-	private EntryMessageEnrichment enrich;
+	private NaturalLanguageProcessing nlp;
 
 	@Mock
 	private EmojiInterpolation emoji;
 	
 	@BeforeEach
 	public void setUp() {
-		this.entry = new AnswerRecruiter(this.bot, this.enrich, this.emoji);
+		this.entry = new AnswerRecruiter(this.bot, this.nlp, this.emoji);
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class AnswerRecruiterTest {
 		
 		assertThat(result).isNull();
 		
-		verify(this.enrich, never()).message(any(EntryMessage.class));
+		verify(this.nlp, never()).understand(any(EntryMessage.class));
 		verify(this.bot, never()).send(any(ResponseMessage.class));
 	}
 	
@@ -51,7 +51,7 @@ public class AnswerRecruiterTest {
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		enriched.response("Hey!");
-		when(this.enrich.message(entry)).thenReturn(enriched);
+		when(this.nlp.understand(entry)).thenReturn(enriched);
 		
 		ResponseMessage message = new ResponseMessage(1L, "Hey!");
 		when(this.emoji.interpolate(message)).thenReturn(message);
@@ -66,7 +66,7 @@ public class AnswerRecruiterTest {
 	public void should_not_send_null_message() {
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
 		EnrichedMessage enriched = new EnrichedMessage(entry);
-		when(this.enrich.message(entry)).thenReturn(enriched);
+		when(this.nlp.understand(entry)).thenReturn(enriched);
 		
 		ResponseMessage result = this.entry.to(entry);
 		ResponseMessage message = new ResponseMessage(1L, null);

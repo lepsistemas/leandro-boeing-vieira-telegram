@@ -12,9 +12,9 @@ import com.pengrad.telegrambot.TelegramBot;
 import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.domain.usecase.Bot;
 import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
-import br.com.lepsistemas.telegram.domain.usecase.EntryMessageEnrichment;
-import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessingService;
+import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
 import br.com.lepsistemas.telegram.infrastructure.telegram.ChatBot;
+import br.com.lepsistemas.telegram.infrastructure.telegram.UnicodeEmojiInterpolation;
 import br.com.lepsistemas.telegram.infrastructure.watson.WatsonAssistant;
 
 @Configuration
@@ -30,22 +30,17 @@ public class BeanConfiguration {
 	private String watsonAssistantId;
 	
 	@Bean
-	public AnswerRecruiter answerRecruiter(Bot bot, EntryMessageEnrichment entryMessageEnrichment, EmojiInterpolation emojiInterpreter) {
-		return new AnswerRecruiter(bot, entryMessageEnrichment, emojiInterpreter);
+	public AnswerRecruiter answerRecruiter(Bot bot, NaturalLanguageProcessing nlp, EmojiInterpolation emojiInterpolation) {
+		return new AnswerRecruiter(bot, nlp, emojiInterpolation);
 	}
 	
 	@Bean
 	public EmojiInterpolation emojiInterpreter() {
-		return new EmojiInterpolation();
-	}
-
-	@Bean
-	public EntryMessageEnrichment entryMessageEnrichment(NaturalLanguageProcessingService nlpService) {
-		return new EntryMessageEnrichment(nlpService);
+		return new UnicodeEmojiInterpolation();
 	}
 	
 	@Bean
-	public NaturalLanguageProcessingService nlpService(Assistant assistant) {
+	public NaturalLanguageProcessing nlpService(Assistant assistant) {
 		return new WatsonAssistant(this.watsonAssistantId, assistant);
 	}
 	

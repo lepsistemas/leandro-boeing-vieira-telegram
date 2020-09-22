@@ -52,18 +52,3 @@ check.dependsOn jacocoTestReport
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
-
-sourceSets {
-    architectureTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/test/architecture')
-        }
-    }
-}
-
-task architectureTest(type: Test) {
-    testClassesDirs = sourceSets.architectureTest.output.classesDirs
-    classpath = sourceSets.architectureTest.runtimeClasspath
-} 
