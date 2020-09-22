@@ -10,12 +10,12 @@ public class AnswerRecruiter {
 	
 	private static final String COMMAND_BOT_STARTING_TEXT = "/";
 	
-	private Messaging bot;
+	private Messaging messaging;
 	private NaturalLanguageProcessing nlp;
 	private EmojiInterpolation emoji;
 	
-	public AnswerRecruiter(Messaging bot, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
-		this.bot = bot;
+	public AnswerRecruiter(Messaging messaging, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
+		this.messaging = messaging;
 		this.nlp = nlp;
 		this.emoji = emoji;
 	}
@@ -40,7 +40,7 @@ public class AnswerRecruiter {
 		
 		if (message.text() != null) {
 			AnswerRecruiter.log.info("--- Sending: {} ---", messageWithEmoji);
-			this.bot.send(messageWithEmoji);
+			this.messaging.send(messageWithEmoji);
 		}
 		
 		return message;
