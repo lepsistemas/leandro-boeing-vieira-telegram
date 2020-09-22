@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebhookController {
 	
-	private AnswerRecruiter entry;
+	private AnswerRecruiter answer;
 	
 	@PostMapping("/webhook")
 	public ResponseEntity<String> webhook(@RequestBody String body) {
 		Update update = BotUtils.parseUpdate(body);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
-		ResponseMessage response = this.entry.to(message);
+		ResponseMessage response = this.answer.to(message);
 		return ResponseEntity.status(HttpStatus.OK).body(response != null ? response.text() : null);
 	}
 	
@@ -38,8 +38,8 @@ public class WebhookController {
 	}
 	
 	@Autowired
-	public void setEntryUpdate(AnswerRecruiter entry) {
-		this.entry = entry;
+	public void setEntryUpdate(AnswerRecruiter answer) {
+		this.answer = answer;
 	}
 	
 	
