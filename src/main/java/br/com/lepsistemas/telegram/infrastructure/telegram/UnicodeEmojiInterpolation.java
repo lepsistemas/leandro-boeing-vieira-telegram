@@ -18,6 +18,9 @@ public class UnicodeEmojiInterpolation implements EmojiInterpolation {
 	}
 
 	public ResponseMessage interpolate(ResponseMessage message) {
+		if (message.text() == null) {
+			return message;
+		}
 		String text = message.text();
 		for(Entry<String, String> emoji : this.emojis.entrySet()) {
 			text = text.replaceAll(emoji.getKey(), emoji.getValue());

@@ -18,5 +18,15 @@ public class UnicodeEmojiInterpolationTest {
 		
 		assertThat(result.text()).isEqualTo("Hi 😉 😥");
 	}
+	
+	@Test
+	public void should_not_interpolate_if_text_is_null() {
+		EmojiInterpolation emoji = new UnicodeEmojiInterpolation();
+		
+		ResponseMessage message = new ResponseMessage(1L, null);
+		ResponseMessage result = emoji.interpolate(message);
+		
+		assertThat(result.text()).isNull();
+	}
 
 }
