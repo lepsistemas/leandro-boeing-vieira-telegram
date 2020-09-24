@@ -21,7 +21,6 @@ import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.cloud.sdk.core.http.ServiceCallback;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
-import com.ibm.watson.assistant.v2.model.DeleteSessionOptions;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageContextSkill;
 import com.ibm.watson.assistant.v2.model.MessageContextSkills;
@@ -63,13 +62,10 @@ public class WatsonAssistantTest {
 		ServiceCall<SessionResponse> session = new ServiceSessionResponse();
 		when(this.service.createSession(any(CreateSessionOptions.class))).thenReturn(session);
 		
-		Map<String, Object> context = new HashMap<>();
-		context.put("key", "value");
-		ServiceCall<MessageResponse> options = new ServiceMessageResponse(context, true);
+		Map<String, Object> userDefined = new HashMap<>();
+		userDefined.put("key", "value");
+		ServiceCall<MessageResponse> options = new ServiceMessageResponse(null, userDefined, true);
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
-		
-		ServiceCall<Void> delete = new ServiceDeleteSession();
-		when(this.service.deleteSession(any(DeleteSessionOptions.class))).thenReturn(delete);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
 		EnrichedMessage result = this.assistant.understand(entry);
@@ -90,11 +86,8 @@ public class WatsonAssistantTest {
 		ServiceCall<SessionResponse> session = new ServiceSessionResponse();
 		when(this.service.createSession(any(CreateSessionOptions.class))).thenReturn(session);
 		
-		ServiceCall<MessageResponse> options = new ServiceMessageResponse(null, true);
+		ServiceCall<MessageResponse> options = new ServiceMessageResponse(null, null, true);
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
-		
-		ServiceCall<Void> delete = new ServiceDeleteSession();
-		when(this.service.deleteSession(any(DeleteSessionOptions.class))).thenReturn(delete);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
 		EnrichedMessage result = this.assistant.understand(entry);
@@ -113,11 +106,10 @@ public class WatsonAssistantTest {
 		ServiceCall<SessionResponse> session = new ServiceSessionResponse();
 		when(this.service.createSession(any(CreateSessionOptions.class))).thenReturn(session);
 		
-		ServiceCall<MessageResponse> options = new ServiceMessageResponse(null, false);
+		Map<String, Object> system = new HashMap<>();
+		system.put("sessionId", "session-id");
+		ServiceCall<MessageResponse> options = new ServiceMessageResponse(system , null, false);
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
-		
-		ServiceCall<Void> delete = new ServiceDeleteSession();
-		when(this.service.deleteSession(any(DeleteSessionOptions.class))).thenReturn(delete);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
 		EnrichedMessage result = this.assistant.understand(entry);
@@ -131,11 +123,13 @@ public class WatsonAssistantTest {
 	
 	private static class ServiceMessageResponse implements ServiceCall<MessageResponse> {
 		
-		private Map<String, Object> context;
+		private Map<String, Object> system;
+		private Map<String, Object> userDefined;
 		private boolean hasIntents;
 
-		public ServiceMessageResponse(Map<String, Object> context, boolean hasIntents) {
-			this.context = context;
+		public ServiceMessageResponse(Map<String, Object> system, Map<String, Object> userDefined, boolean hasIntents) {
+			this.system = system;
+			this.userDefined = userDefined;
 			this.hasIntents = hasIntents;
 		}
 
@@ -153,7 +147,7 @@ public class WatsonAssistantTest {
 					.code(200)
 					.message("")
 					.build();
-			MessageResponse message = new FakeMessageResponse(this.context, this.hasIntents);
+			MessageResponse message = new FakeMessageResponse(this.system, this.userDefined, this.hasIntents);
 			return new Response<MessageResponse>(message, response);
 		}
 
@@ -172,38 +166,11 @@ public class WatsonAssistantTest {
 		
 	}
 	
-	private static class ServiceDeleteSession implements ServiceCall<Void> {
-
-		@Override
-		public ServiceCall<Void> addHeader(String name, String value) {
-			return null;
-		}
-
-		@Override
-		public Response<Void> execute() throws RuntimeException {
-			return null;
-		}
-
-		@Override
-		public void enqueue(ServiceCallback<Void> callback) {
-		}
-
-		@Override
-		public Single<Response<Void>> reactiveRequest() {
-			return null;
-		}
-
-		@Override
-		public void cancel() {
-		}
-		
-	}
-	
-	private static class FakeMessagerOutput extends MessageOutput {
+	private static class FakeMessageOutput extends MessageOutput {
 		
 		private boolean hasIntents;
 
-		public FakeMessagerOutput(boolean hasIntents) {
+		public FakeMessageOutput(boolean hasIntents) {
 			this.hasIntents = hasIntents;
 		}
 
@@ -225,11 +192,13 @@ public class WatsonAssistantTest {
 	
 	private static class FakeMessageResponse extends MessageResponse {
 		
-		private Map<String, Object> context;
+		private Map<String, Object> system;
+		private Map<String, Object> userDefined;
 		private boolean hasIntents;
 
-		public FakeMessageResponse(Map<String, Object> userDefined, boolean hasIntents) {
-			this.context = userDefined;
+		public FakeMessageResponse(Map<String, Object> system, Map<String, Object> userDefined, boolean hasIntents) {
+			this.system = system;
+			this.userDefined = userDefined;
 			this.hasIntents = hasIntents;
 		}
 		
@@ -237,7 +206,8 @@ public class WatsonAssistantTest {
 		public MessageContext getContext() {
 			MessageContextSkills skills = new MessageContextSkills();
 			MessageContextSkill skill = new MessageContextSkill.Builder()
-					.userDefined(this.context)
+					.system(this.system)
+					.userDefined(this.userDefined)
 					.build();
 			skills.put("main skill", skill);
 			MessageContext context = new MessageContext.Builder()
@@ -248,7 +218,7 @@ public class WatsonAssistantTest {
 		
 		@Override
 		public MessageOutput getOutput() {
-			return new FakeMessagerOutput(this.hasIntents);
+			return new FakeMessageOutput(this.hasIntents);
 		}
 	}
 	

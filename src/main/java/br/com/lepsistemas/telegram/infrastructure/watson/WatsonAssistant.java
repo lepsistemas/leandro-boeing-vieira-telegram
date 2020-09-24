@@ -10,7 +10,6 @@ import java.util.Random;
 import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
-import com.ibm.watson.assistant.v2.model.DeleteSessionOptions;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageInput;
 import com.ibm.watson.assistant.v2.model.MessageInputOptions;
@@ -46,12 +45,15 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 			messageContext = new MessageContext.Builder().build();
 		}
 		
+		String sessionId = messageContext.global() != null ? messageContext.global().sessionId() : null;
+		if (sessionId == null) {
+			sessionId = createSession();
+		}
+		
 		MessageInput messageInput = new MessageInput.Builder()
 				.text(entry.text())
 				.options(new MessageInputOptions.Builder().returnContext(true).build())
 				.build();
-		
-		String sessionId = createSession();
 		
 		MessageOptions messageOptions = new MessageOptions.Builder()
 				  .assistantId(this.assistantId)
@@ -68,8 +70,6 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 		this.extractResponse(enriched, messageResponse);
 		this.extractIntents(enriched, messageResponse);
 		this.extractContext(enriched, messageContext);
-		
-		deleteSession(sessionId);
 		
 		return enriched;
 	}
@@ -104,11 +104,6 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 		if (!responses.isEmpty()) {
 			enriched.response(responses.get(new Random().nextInt(responses.size())));
 		}
-	}
-
-	private void deleteSession(String sessionId) {
-		DeleteSessionOptions deleteSessionOptions = new DeleteSessionOptions.Builder(assistantId, sessionId).build();
-	    this.service.deleteSession(deleteSessionOptions).execute();
 	}
 
 	private String createSession() {
