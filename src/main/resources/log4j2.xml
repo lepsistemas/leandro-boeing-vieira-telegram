@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="INFO">
+	<Appenders>
+		<Console name="ConsoleAppender" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n" />
+		</Console>
+		<NoSql name="MongoAppender">
+			<MongoDb3 databaseName="recruiter-bot" collectionName="logs" factoryClassName="br.com.lepsistemas.telegram.infrastructure.log.LogMongoDbFactory"
+               factoryMethodName="client" />
+		</NoSql>
+	</Appenders>
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="ConsoleAppender" />
+		</Root>
+		<Logger name="br.com.lepsistemas.telegram" level="INFO" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="MongoAppender" />
+		</Logger>
+	</Loggers>
+</Configuration>

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import br.com.lepsistemas.telegram.Application;
 import br.com.lepsistemas.telegram.infrastructure.spring.controller.WebhookController;
 
 @SpringBootTest(classes = Application.class)

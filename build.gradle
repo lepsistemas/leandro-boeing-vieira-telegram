@@ -22,7 +22,14 @@ dependencies {
 	testImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
 	compile 'com.github.pengrad:java-telegram-bot-api:4.9.0'
 	compile 'com.ibm.watson:assistant:8.6.0'
+	compile 'org.springframework.boot:spring-boot-starter-log4j2'
+	compile 'org.apache.logging.log4j:log4j-mongodb3:2.12.1'
+	compile 'org.mongodb:mongo-java-driver:3.12.7'
 	compileOnly 'org.projectlombok:lombok:1.18.12'
+}
+
+configurations {
+	compile.exclude module: 'spring-boot-starter-logging'
 }
 
 test {
