@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration status="INFO">
+<Configuration packages="org.graylog2.log4j" shutdownHook="disable" status="INFO">
 	<Appenders>
+		<ScriptAppenderSelector name="MongoOrNullAppender">
+			<Script language="groovy">
+				<![CDATA[
+	    			if (System.getProperty("MONGO_APPENDER_ENABLED", 'false').equalsIgnoreCase('true')) {
+	    				return "MongoAppender";
+	    			}
+	    			return "NullAppender";
+    			]]>
+    		</Script>
+    		<AppenderSet>
+    			<NoSql name="MongoAppender">
+					<MongoDb3 databaseName="recruiter-bot" collectionName="logs" factoryClassName="br.com.lepsistemas.telegram.infrastructure.log.LogMongoDbFactory" factoryMethodName="client" />
+				</NoSql>
+    			<Null name="NullAppender" />
+    		</AppenderSet>
+		</ScriptAppenderSelector>
 		<Console name="ConsoleAppender" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n" />
 		</Console>
-		<NoSql name="MongoAppender">
-			<MongoDb3 databaseName="recruiter-bot" collectionName="logs" factoryClassName="br.com.lepsistemas.telegram.infrastructure.log.LogMongoDbFactory"
-               factoryMethodName="client" />
-		</NoSql>
 	</Appenders>
 	<Loggers>
 		<Root level="INFO">
@@ -15,7 +27,7 @@
 		</Root>
 		<Logger name="br.com.lepsistemas.telegram" level="INFO" additivity="false">
 			<AppenderRef ref="ConsoleAppender" />
-			<AppenderRef ref="MongoAppender" />
+			<AppenderRef ref="MongoOrNullAppender" />
 		</Logger>
 	</Loggers>
 </Configuration>
