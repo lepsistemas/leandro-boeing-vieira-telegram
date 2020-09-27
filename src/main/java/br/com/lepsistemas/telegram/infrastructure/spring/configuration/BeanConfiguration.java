@@ -10,8 +10,8 @@ import com.ibm.watson.assistant.v2.Assistant;
 import com.pengrad.telegrambot.TelegramBot;
 
 import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
-import br.com.lepsistemas.telegram.domain.usecase.Messaging;
 import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
+import br.com.lepsistemas.telegram.domain.usecase.Messaging;
 import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
 import br.com.lepsistemas.telegram.infrastructure.telegram.TelegramMessaging;
 import br.com.lepsistemas.telegram.infrastructure.telegram.UnicodeEmojiInterpolation;
