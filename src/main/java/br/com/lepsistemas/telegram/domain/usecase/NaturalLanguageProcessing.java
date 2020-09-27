@@ -1,10 +1,12 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
+import java.util.List;
+
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 
 public interface NaturalLanguageProcessing {
 	
-	EnrichedMessage understand(EntryMessage entry);
+	List<EnrichedMessage> understand(EntryMessage entry);
 
 }

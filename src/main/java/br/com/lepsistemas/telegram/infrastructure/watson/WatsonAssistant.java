@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.watson.assistant.v2.Assistant;
@@ -37,9 +36,7 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 	}
 
 	@Override
-	public EnrichedMessage understand(EntryMessage entry) {
-		EnrichedMessage enriched = new EnrichedMessage(entry);
-		
+	public List<EnrichedMessage> understand(EntryMessage entry) {
 		MessageContext messageContext = this.contexts.get(entry.id());
 		if (messageContext == null) {
 			messageContext = new MessageContext.Builder().build();
@@ -67,11 +64,26 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 		messageContext = messageResponse.getContext();
 		this.contexts.put(entry.id(), messageContext);
 		
-		this.extractResponse(enriched, messageResponse);
-		this.extractIntents(enriched, messageResponse);
-		this.extractContext(enriched, messageContext);
+		List<EnrichedMessage> enrichedMessages = new ArrayList<>();
+		if (messageResponse.getOutput() != null && messageResponse.getOutput().getGeneric() != null) {
+			for (RuntimeResponseGeneric generic : messageResponse.getOutput().getGeneric()) {
+				EnrichedMessage enriched = new EnrichedMessage(entry);
+				
+				this.extractResponse(enriched, generic);
+				this.extractIntents(enriched, messageResponse);
+				this.extractContext(enriched, messageContext);
+				
+				enrichedMessages.add(enriched);
+			}
+		}
 		
-		return enriched;
+		return enrichedMessages;
+	}
+
+	private void extractResponse(EnrichedMessage enriched, RuntimeResponseGeneric generic) {
+		if ("text".equals(generic.responseType())) {
+			enriched.response((generic.text()));
+		}
 	}
 
 	private void extractContext(EnrichedMessage enriched, MessageContext messageContext) {
@@ -84,25 +96,8 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 	}
 
 	private void extractIntents(EnrichedMessage enriched, MessageResponse messageResponse) {
-		if (messageResponse.getOutput() != null) {
-			for(RuntimeIntent intent : messageResponse.getOutput().getIntents()) {
-				enriched.addIntent(intent.intent(), intent.confidence());
-			}
-		}
-	}
-
-	private void extractResponse(EnrichedMessage enriched, MessageResponse messageResponse) {
-		List<String> responses = new ArrayList<>();
-		if (messageResponse.getOutput() != null && messageResponse.getOutput().getGeneric() != null) {
-			for (RuntimeResponseGeneric generic : messageResponse.getOutput().getGeneric()) {
-				if ("text".equals(generic.responseType())) {
-					responses.add(generic.text());
-				}
-			}
-		}
-		
-		if (!responses.isEmpty()) {
-			enriched.response(responses.get(new Random().nextInt(responses.size())));
+		for(RuntimeIntent intent : messageResponse.getOutput().getIntents()) {
+			enriched.addIntent(intent.intent(), intent.confidence());
 		}
 	}
 

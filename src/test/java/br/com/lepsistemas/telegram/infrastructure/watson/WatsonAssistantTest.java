@@ -68,17 +68,18 @@ public class WatsonAssistantTest {
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
-		EnrichedMessage result = this.assistant.understand(entry);
+		List<EnrichedMessage> result = this.assistant.understand(entry);
 		
-		assertThat(result.intents()).hasSize(1);
-		assertThat(result.intents().get(0).value()).isEqualTo("intent");
-		assertThat(result.intents().get(0).confidence()).isEqualTo(Double.valueOf(0.9));
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0).intents()).hasSize(1);
+		assertThat(result.get(0).intents().get(0).value()).isEqualTo("intent");
+		assertThat(result.get(0).intents().get(0).confidence()).isEqualTo(Double.valueOf(0.9));
 		
-		assertThat(result.contexts()).hasSize(1);
-		assertThat(result.contexts().get(0).key()).isEqualTo("key");
-		assertThat(result.contexts().get(0).value()).isEqualTo("value");
+		assertThat(result.get(0).contexts()).hasSize(1);
+		assertThat(result.get(0).contexts().get(0).key()).isEqualTo("key");
+		assertThat(result.get(0).contexts().get(0).value()).isEqualTo("value");
 		
-		assertThat(result.response()).isEqualTo("Response");
+		assertThat(result.get(0).response()).isEqualTo("Response");
 	}
 	
 	@Test
@@ -90,15 +91,16 @@ public class WatsonAssistantTest {
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
-		EnrichedMessage result = this.assistant.understand(entry);
+		List<EnrichedMessage> result = this.assistant.understand(entry);
 		
-		assertThat(result.intents()).hasSize(1);
-		assertThat(result.intents().get(0).value()).isEqualTo("intent");
-		assertThat(result.intents().get(0).confidence()).isEqualTo(Double.valueOf(0.9));
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0).intents()).hasSize(1);
+		assertThat(result.get(0).intents().get(0).value()).isEqualTo("intent");
+		assertThat(result.get(0).intents().get(0).confidence()).isEqualTo(Double.valueOf(0.9));
 		
-		assertThat(result.contexts()).hasSize(0);
+		assertThat(result.get(0).contexts()).hasSize(0);
 		
-		assertThat(result.response()).isEqualTo("Response");
+		assertThat(result.get(0).response()).isEqualTo("Response");
 	}
 	
 	@Test
@@ -112,13 +114,12 @@ public class WatsonAssistantTest {
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
 		
 		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
-		EnrichedMessage result = this.assistant.understand(entry);
-		
-		assertThat(result.intents()).hasSize(0);
-		
-		assertThat(result.contexts()).hasSize(0);
-		
-		assertThat(result.response()).isEqualTo("Response");
+		List<EnrichedMessage> result = this.assistant.understand(entry);
+
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0).intents()).hasSize(0);
+		assertThat(result.get(0).contexts()).hasSize(0);
+		assertThat(result.get(0).response()).isEqualTo("Response");
 	}
 	
 	private static class ServiceMessageResponse implements ServiceCall<MessageResponse> {

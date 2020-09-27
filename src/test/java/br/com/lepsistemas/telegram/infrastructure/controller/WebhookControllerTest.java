@@ -1,7 +1,10 @@
 package br.com.lepsistemas.telegram.infrastructure.controller;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,25 +42,37 @@ public class WebhookControllerTest {
 		Update update = BotUtils.parseUpdate(request);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		ResponseMessage response = new ResponseMessage(1L, "Hi!");
-		when(this.entry.to(message)).thenReturn(response);
+		when(this.entry.to(message)).thenReturn(asList(response));
 		
-		ResponseEntity<String> result = this.controller.webhook(request);
+		ResponseEntity<List<String>> result = this.controller.webhook(request);
 		
-		assertThat(result.getBody()).isEqualTo("Hi!");
+		assertThat(result.getBody()).isEqualTo(asList("Hi!"));
 	}
 	
 	@Test
 	public void should_return_null_on_webhook() {
-		String request = "{update_id:1, message: {message_id: 2, text: '/start', chat: {id: 3}}}";
+		String request = "{update_id:1, message: {message_id: 2, text: 'Hi!', chat: {id: 3}}}";
+		Update update = BotUtils.parseUpdate(request);
+		EntryMessage message = UpdateToEntryMessage.convert(update);
+		when(this.entry.to(message)).thenReturn(null);
 		
-		ResponseEntity<String> result = this.controller.webhook(request);
+		ResponseEntity<List<String>> result = this.controller.webhook(request);
 		
 		assertThat(result.getBody()).isNull();
 	}
 	
 	@Test
+	public void should_return_empty_on_webhook() {
+		String request = "{update_id:1, message: {message_id: 2, text: '/start', chat: {id: 3}}}";
+		
+		ResponseEntity<List<String>> result = this.controller.webhook(request);
+		
+		assertThat(result.getBody()).isEmpty();
+	}
+	
+	@Test
 	public void should_return_ok_even_with_exception() {
-		ResponseEntity<String> result = this.controller.exception(new RuntimeException("Runtime Exception"));
+		ResponseEntity<List<String>> result = this.controller.exception(new RuntimeException("Runtime Exception"));
 		
 		assertThat(result.getBody()).isNull();
 	}

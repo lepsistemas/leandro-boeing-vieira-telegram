@@ -1,10 +1,13 @@
 package br.com.lepsistemas.telegram.domain.usecase;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +41,7 @@ public class AnswerRecruiterTest {
 	@Test
 	public void should_just_return_when_message_is_start() {
 		EntryMessage entry = new EntryMessage(1L, "/start");
-		ResponseMessage result = this.entry.to(entry);
+		List<ResponseMessage> result = this.entry.to(entry);
 		
 		assertThat(result).isNull();
 		
@@ -51,14 +54,15 @@ public class AnswerRecruiterTest {
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		enriched.response("Hey!");
-		when(this.nlp.understand(entry)).thenReturn(enriched);
+		when(this.nlp.understand(entry)).thenReturn(asList(enriched));
 		
 		ResponseMessage message = new ResponseMessage(1L, "Hey!");
 		when(this.emoji.interpolate(message)).thenReturn(message);
 		
-		ResponseMessage result = this.entry.to(entry);
+		List<ResponseMessage> result = this.entry.to(entry);
 		
-		assertThat(result).isEqualTo(message);
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0)).isEqualTo(message);
 		verify(this.bot).send(message);
 	}
 	
@@ -66,13 +70,13 @@ public class AnswerRecruiterTest {
 	public void should_not_send_null_message() {
 		EntryMessage entry = new EntryMessage(1L, "Hi!");
 		EnrichedMessage enriched = new EnrichedMessage(entry);
-		when(this.nlp.understand(entry)).thenReturn(enriched);
+		when(this.nlp.understand(entry)).thenReturn(asList(enriched));
 		
-		ResponseMessage result = this.entry.to(entry);
+		List<ResponseMessage> result = this.entry.to(entry);
 		ResponseMessage message = new ResponseMessage(1L, null);
 		
-		assertThat(result).isEqualTo(message);
-		
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0)).isNull();
 		verify(this.bot, never()).send(message);
 	}
 

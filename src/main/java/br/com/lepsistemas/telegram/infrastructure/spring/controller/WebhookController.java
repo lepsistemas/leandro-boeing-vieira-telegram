@@ -1,5 +1,8 @@
 package br.com.lepsistemas.telegram.infrastructure.spring.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +27,19 @@ public class WebhookController {
 	private AnswerRecruiter answer;
 	
 	@PostMapping("/webhook")
-	public ResponseEntity<String> webhook(@RequestBody String body) {
+	public ResponseEntity<List<String>> webhook(@RequestBody String body) {
 		Update update = BotUtils.parseUpdate(body);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
-		ResponseMessage response = this.answer.to(message);
-		return ResponseEntity.status(HttpStatus.OK).body(response != null ? response.text() : null);
+		List<ResponseMessage> response = this.answer.to(message);
+		return ResponseEntity.status(HttpStatus.OK).body(response != null ? response(response) : null);
+	}
+	
+	private List<String> response(List<ResponseMessage> response) {
+		return response.stream().map(r -> r.text()).collect(Collectors.toList());
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> exception(Exception e) {
+	public ResponseEntity<List<String>> exception(Exception e) {
 		WebhookController.log.error("--- Error: {} {} ---", e.getCause(), e.getMessage());
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
