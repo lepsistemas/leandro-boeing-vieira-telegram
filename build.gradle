@@ -38,7 +38,10 @@ test {
 	excludes = ['**/*Application.java']
 }
 
-def jacocoExclude = ['**/*Application.class']
+def jacocoExclude = [
+	'**/*Application.class',
+	'**/*LogMongoDbFactory.class'
+]
 
 jacocoTestReport {
     reports {
