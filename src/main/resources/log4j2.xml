@@ -4,7 +4,7 @@
 		<ScriptAppenderSelector name="MongoOrNullAppender">
 			<Script language="groovy">
 				<![CDATA[
-	    			if (System.getenv("MONGO_APPENDER_ENABLED").equalsIgnoreCase('true')) {
+	    			if (System.getenv("MONGO_APPENDER_ENABLED") != null && System.getenv("MONGO_APPENDER_ENABLED").equalsIgnoreCase('true')) {
 	    				return "MongoAppender";
 	    			}
 	    			return "NullAppender";
