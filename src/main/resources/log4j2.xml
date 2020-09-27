@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration packages="org.graylog2.log4j" shutdownHook="disable" status="INFO">
+<Configuration status="INFO">
 	<Appenders>
 		<ScriptAppenderSelector name="MongoOrNullAppender">
 			<Script language="groovy">
 				<![CDATA[
-	    			if (System.getProperty("MONGO_APPENDER_ENABLED", 'false').equalsIgnoreCase('true')) {
+	    			if (System.getenv("MONGO_APPENDER_ENABLED").equalsIgnoreCase('true')) {
 	    				return "MongoAppender";
 	    			}
 	    			return "NullAppender";
