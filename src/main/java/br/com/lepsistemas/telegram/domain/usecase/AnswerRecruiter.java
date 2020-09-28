@@ -45,7 +45,7 @@ public class AnswerRecruiter {
 			
 			messages.add(messageWithEmoji);
 			
-			if (message.text() != null) {
+			if (messageWithEmoji.text() != null) {
 				AnswerRecruiter.log.info("--- Sending: {} ---", messageWithEmoji);
 				this.messaging.send(messageWithEmoji);
 			}
