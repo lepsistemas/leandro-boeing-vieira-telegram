@@ -72,11 +72,13 @@ public class AnswerRecruiterTest {
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		when(this.nlp.understand(entry)).thenReturn(asList(enriched));
 		
-		List<ResponseMessage> result = this.entry.to(entry);
 		ResponseMessage message = new ResponseMessage(1L, null);
+		when(this.emoji.interpolate(message)).thenReturn(message);
+		
+		List<ResponseMessage> result = this.entry.to(entry);
 		
 		assertThat(result).hasSize(1);
-		assertThat(result.get(0)).isNull();
+		assertThat(result.get(0)).isEqualTo(message);
 		verify(this.bot, never()).send(message);
 	}
 
