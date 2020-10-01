@@ -45,10 +45,8 @@ public class WebhookController {
 	}
 	
 	@Autowired
-	public void setEntryUpdate(AnswerRecruiter answer) {
+	public void setAnswerRecruiter(AnswerRecruiter answer) {
 		this.answer = answer;
 	}
-	
-	
 
 }

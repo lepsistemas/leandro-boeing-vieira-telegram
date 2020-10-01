@@ -28,12 +28,12 @@ public class WebhookControllerTest {
 	private WebhookController controller;
 	
 	@Mock
-	private AnswerRecruiter entry;
+	private AnswerRecruiter answer;
 	
 	@BeforeEach
 	public void setUp() {
 		this.controller = new WebhookController();
-		this.controller.setEntryUpdate(entry);
+		this.controller.setAnswerRecruiter(answer);
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class WebhookControllerTest {
 		Update update = BotUtils.parseUpdate(request);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		ResponseMessage response = new ResponseMessage(1L, "Hi!");
-		when(this.entry.to(message)).thenReturn(asList(response));
+		when(this.answer.to(message)).thenReturn(asList(response));
 		
 		ResponseEntity<List<String>> result = this.controller.webhook(request);
 		
@@ -54,7 +54,7 @@ public class WebhookControllerTest {
 		String request = "{update_id:1, message: {message_id: 2, text: 'Hi!', chat: {id: 3}}}";
 		Update update = BotUtils.parseUpdate(request);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
-		when(this.entry.to(message)).thenReturn(null);
+		when(this.answer.to(message)).thenReturn(null);
 		
 		ResponseEntity<List<String>> result = this.controller.webhook(request);
 		

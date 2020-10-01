@@ -6,3 +6,14 @@ watson:
   assistant:
     key: ${WATSON_ASSISTANT_KEY}
     id: ${WATSON_ASSISTANT_ID}
+
+kafka:
+  bootstrap:
+    servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  group:
+    id: ${KAFKA_GROUP_ID}
+  client:
+    id: ${KAFKA_CLIENT_ID}
+  security:
+    username: ${KAFKA_SECURITY_USERNAME}
+    password: ${KAFKA_SECURITY_PASSWORD}

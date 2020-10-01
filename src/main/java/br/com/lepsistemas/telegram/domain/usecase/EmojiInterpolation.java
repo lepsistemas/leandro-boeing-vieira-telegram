@@ -4,6 +4,6 @@ import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
 
 public interface EmojiInterpolation {
 
-	public ResponseMessage interpolate(ResponseMessage message);
+	ResponseMessage interpolate(ResponseMessage message);
 
 }

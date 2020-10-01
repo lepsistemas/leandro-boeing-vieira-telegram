@@ -6,6 +6,8 @@ import java.util.List;
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
+import br.com.lepsistemas.telegram.domain.model.event.ResponseMessageEvent;
+import br.com.lepsistemas.telegram.domain.usecase.event.EventPublisher;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -13,12 +15,12 @@ public class AnswerRecruiter {
 	
 	private static final String COMMAND_BOT_STARTING_TEXT = "/";
 	
-	private Messaging messaging;
+	private EventPublisher<ResponseMessageEvent> publisher;
 	private NaturalLanguageProcessing nlp;
 	private EmojiInterpolation emoji;
 	
-	public AnswerRecruiter(Messaging messaging, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
-		this.messaging = messaging;
+	public AnswerRecruiter(EventPublisher<ResponseMessageEvent> publisher, NaturalLanguageProcessing nlp, EmojiInterpolation emoji) {
+		this.publisher = publisher;
 		this.nlp = nlp;
 		this.emoji = emoji;
 	}
@@ -46,8 +48,7 @@ public class AnswerRecruiter {
 			messages.add(messageWithEmoji);
 			
 			if (messageWithEmoji.text() != null) {
-				AnswerRecruiter.log.info("--- Sending: {} ---", messageWithEmoji);
-				this.messaging.send(messageWithEmoji);
+				this.publisher.publish(new ResponseMessageEvent(messageWithEmoji));
 			}
 		}
 		

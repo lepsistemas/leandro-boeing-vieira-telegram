@@ -23,5 +23,30 @@
     "name": "watson.nlu.key",
     "type": "java.lang.String",
     "description": "A description for 'watson.nlu.key'"
+  },
+  {
+    "name": "kafka.bootstrap.servers",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.bootstrap.servers'"
+  },
+  {
+    "name": "kafka.client.id",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.client.id'"
+  },
+  {
+    "name": "kafka.security.password",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.security.password'"
+  },
+  {
+    "name": "kafka.security.username",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.security.username'"
+  },
+  {
+    "name": "kafka.group.id",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.group.id'"
   }
 ]}

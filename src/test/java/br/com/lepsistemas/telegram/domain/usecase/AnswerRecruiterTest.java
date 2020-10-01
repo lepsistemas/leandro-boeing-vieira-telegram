@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.model.ResponseMessage;
+import br.com.lepsistemas.telegram.domain.model.event.ResponseMessageEvent;
+import br.com.lepsistemas.telegram.domain.usecase.event.EventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 public class AnswerRecruiterTest {
@@ -25,7 +27,7 @@ public class AnswerRecruiterTest {
 	private AnswerRecruiter entry;
 	
 	@Mock
-	private Messaging bot;
+	private EventPublisher<ResponseMessageEvent> publisher;
 	
 	@Mock
 	private NaturalLanguageProcessing nlp;
@@ -35,7 +37,7 @@ public class AnswerRecruiterTest {
 	
 	@BeforeEach
 	public void setUp() {
-		this.entry = new AnswerRecruiter(this.bot, this.nlp, this.emoji);
+		this.entry = new AnswerRecruiter(this.publisher, this.nlp, this.emoji);
 	}
 	
 	@Test
@@ -46,7 +48,7 @@ public class AnswerRecruiterTest {
 		assertThat(result).isNull();
 		
 		verify(this.nlp, never()).understand(any(EntryMessage.class));
-		verify(this.bot, never()).send(any(ResponseMessage.class));
+		verify(this.publisher, never()).publish(any(ResponseMessageEvent.class));
 	}
 	
 	@Test
@@ -63,7 +65,7 @@ public class AnswerRecruiterTest {
 		
 		assertThat(result).hasSize(1);
 		assertThat(result.get(0)).isEqualTo(message);
-		verify(this.bot).send(message);
+		verify(this.publisher).publish(new ResponseMessageEvent(message));
 	}
 	
 	@Test
@@ -79,7 +81,7 @@ public class AnswerRecruiterTest {
 		
 		assertThat(result).hasSize(1);
 		assertThat(result.get(0)).isEqualTo(message);
-		verify(this.bot, never()).send(message);
+		verify(this.publisher, never()).publish(new ResponseMessageEvent(message));
 	}
 
 }
