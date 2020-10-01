@@ -46,7 +46,10 @@ test {
 
 def jacocoExclude = [
 	'**/*Application.class',
-	'**/*LogMongoDbFactory.class'
+	'**/*LogMongoDbFactory.class',
+	'**/*ResponseMessageEventPublisher.class',
+	'**/*ResponseMessageEventSubscriber.class',
+	'**/*BeanConfiguration.class'
 ]
 
 jacocoTestReport {
