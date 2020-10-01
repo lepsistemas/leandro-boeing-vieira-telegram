@@ -15,11 +15,7 @@ repositories {
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web') {
-		exclude group: 'com.fasterxml.jackson.core'
-		exclude group: 'com.fasterxml.jackson.datatype'
-		exclude group: 'com.fasterxml.jackson.module'
-	}
+	compile 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
