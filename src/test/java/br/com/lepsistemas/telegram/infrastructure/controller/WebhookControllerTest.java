@@ -38,7 +38,7 @@ public class WebhookControllerTest {
 	
 	@Test
 	public void should_return_message_on_webhook() {
-		String request = "{update_id:1, message: {message_id: 2, text: 'Hi!', chat: {id: 3}}}";
+		String request = "{update_id:1, message: {message_id: 2, from: {username: 'username'}, text: 'Hi!', chat: {id: 3}}}";
 		Update update = BotUtils.parseUpdate(request);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		ResponseMessage response = new ResponseMessage(1L, "Hi!");
@@ -51,7 +51,7 @@ public class WebhookControllerTest {
 	
 	@Test
 	public void should_return_null_on_webhook() {
-		String request = "{update_id:1, message: {message_id: 2, text: 'Hi!', chat: {id: 3}}}";
+		String request = "{update_id:1, message: {message_id: 2, from: {username: 'username'}, text: 'Hi!', chat: {id: 3}}}";
 		Update update = BotUtils.parseUpdate(request);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		when(this.answer.to(message)).thenReturn(null);
@@ -63,7 +63,7 @@ public class WebhookControllerTest {
 	
 	@Test
 	public void should_return_empty_on_webhook() {
-		String request = "{update_id:1, message: {message_id: 2, text: '/start', chat: {id: 3}}}";
+		String request = "{update_id:1, message: {message_id: 2, from: {username: 'username'}, text: '/start', chat: {id: 3}}}";
 		
 		ResponseEntity<List<String>> result = this.controller.webhook(request);
 		

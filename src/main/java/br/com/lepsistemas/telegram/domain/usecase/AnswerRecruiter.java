@@ -31,7 +31,7 @@ public class AnswerRecruiter {
 			return null;
 		}
 		
-		EntryMessage normalizedEntry = new EntryMessage(entry.id(), entry.text().replaceAll("\n", " ").replaceAll("\r", " ").trim());
+		EntryMessage normalizedEntry = new EntryMessage(entry.id(), entry.sender(), entry.text().replaceAll("\n", " ").replaceAll("\r", " ").trim());
 		List<EnrichedMessage> enrichedMessages = this.nlp.understand(normalizedEntry);
 		AnswerRecruiter.log.info("--- Enriched: {} ---", enrichedMessages);
 		

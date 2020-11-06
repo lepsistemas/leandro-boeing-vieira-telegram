@@ -19,7 +19,7 @@ public class SendMessageTask {
 	private EventSubscriber<ResponseMessageEvent> subscriber;
 	private Messaging messaging;
 
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 60000)
 	public void messages() {
 		List<ResponseMessageEvent> events = this.subscriber.subscribe();
 		for (ResponseMessageEvent event : events) {

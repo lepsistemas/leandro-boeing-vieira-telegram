@@ -42,7 +42,7 @@ public class AnswerRecruiterTest {
 	
 	@Test
 	public void should_just_return_when_message_is_start() {
-		EntryMessage entry = new EntryMessage(1L, "/start");
+		EntryMessage entry = new EntryMessage(1L, "username", "/start");
 		List<ResponseMessage> result = this.entry.to(entry);
 		
 		assertThat(result).isNull();
@@ -53,7 +53,7 @@ public class AnswerRecruiterTest {
 	
 	@Test
 	public void should_send_message() {
-		EntryMessage entry = new EntryMessage(1L, "Hi!");
+		EntryMessage entry = new EntryMessage(1L, "username","Hi!");
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		enriched.response("Hey!");
 		when(this.nlp.understand(entry)).thenReturn(asList(enriched));
@@ -70,7 +70,7 @@ public class AnswerRecruiterTest {
 	
 	@Test
 	public void should_not_send_null_message() {
-		EntryMessage entry = new EntryMessage(1L, "Hi!");
+		EntryMessage entry = new EntryMessage(1L, "username", "Hi!");
 		EnrichedMessage enriched = new EnrichedMessage(entry);
 		when(this.nlp.understand(entry)).thenReturn(asList(enriched));
 		

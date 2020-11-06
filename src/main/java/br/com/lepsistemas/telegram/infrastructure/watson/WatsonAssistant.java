@@ -42,6 +42,10 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 			messageContext = new MessageContext.Builder().build();
 		}
 		
+		if (entry.sender() != null) {
+			messageContext.skills().get("main skill").userDefined().put("recruiter_name", entry.sender());
+		}
+		
 		String sessionId = messageContext.global() != null ? messageContext.global().sessionId() : null;
 		if (sessionId == null) {
 			sessionId = createSession();

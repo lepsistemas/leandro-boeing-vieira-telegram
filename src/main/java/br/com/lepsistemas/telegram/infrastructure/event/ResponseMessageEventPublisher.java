@@ -51,22 +51,20 @@ public class ResponseMessageEventPublisher implements EventPublisher<ResponseMes
 		}
 	}
 
+	@Override
+	public void publish(ResponseMessageEvent event) {
+		ProducerRecord<String, ResponseMessageEvent> record = new ProducerRecord<>(ResponseMessageEventPublisher.TOPIC, event);
+		kafkaProducer.send(record, sent());
+	}
+
 	private Callback sent() {
 		return new Callback() {
-
 			@Override
 			public void onCompletion(RecordMetadata metadata, Exception exception) {
 				ResponseMessageEventPublisher.log.info("--- Message sent to: {} ---", metadata.topic());
 			}
 			
 		};
-	}
-
-	@Override
-	public void publish(ResponseMessageEvent event) {
-		ProducerRecord<String, ResponseMessageEvent> record = new ProducerRecord<>(ResponseMessageEventPublisher.TOPIC, event);
-		kafkaProducer.send(record, sent());
-		
 	}
 
 }

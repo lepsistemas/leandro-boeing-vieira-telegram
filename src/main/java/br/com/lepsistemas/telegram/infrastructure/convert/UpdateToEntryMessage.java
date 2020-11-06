@@ -9,7 +9,10 @@ public class UpdateToEntryMessage {
 	private UpdateToEntryMessage() {}
 	
 	public static EntryMessage convert(Update update) {
-		return new EntryMessage(update.message().chat().id(), update.message().text());
+		return new EntryMessage(
+				update.message().chat().id(),
+				update.message().from().firstName(), 
+				update.message().text());
 	}
 
 }

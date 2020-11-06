@@ -67,7 +67,7 @@ public class WatsonAssistantTest {
 		ServiceCall<MessageResponse> options = new ServiceMessageResponse(null, userDefined, true);
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
 		
-		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
+		EntryMessage entry = new EntryMessage(1L, "Recruiter", "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
 		List<EnrichedMessage> result = this.assistant.understand(entry);
 		
 		assertThat(result).hasSize(1);
@@ -90,7 +90,7 @@ public class WatsonAssistantTest {
 		ServiceCall<MessageResponse> options = new ServiceMessageResponse(null, null, true);
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
 		
-		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
+		EntryMessage entry = new EntryMessage(1L, "Recruiter", "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
 		List<EnrichedMessage> result = this.assistant.understand(entry);
 		
 		assertThat(result).hasSize(1);
@@ -113,7 +113,7 @@ public class WatsonAssistantTest {
 		ServiceCall<MessageResponse> options = new ServiceMessageResponse(system , null, false);
 		when(this.service.message(any(MessageOptions.class))).thenReturn(options);
 		
-		EntryMessage entry = new EntryMessage(1L, "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
+		EntryMessage entry = new EntryMessage(1L, "Recruiter", "Hi Leandro! My name is Sara and I'm from Amazon offering you a Java Developer job.");
 		List<EnrichedMessage> result = this.assistant.understand(entry);
 
 		assertThat(result).hasSize(1);
