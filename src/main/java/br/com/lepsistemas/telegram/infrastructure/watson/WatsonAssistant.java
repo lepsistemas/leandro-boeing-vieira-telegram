@@ -45,7 +45,7 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 	public List<EnrichedMessage> understand(EntryMessage entry) {
 		MessageContext messageContext = this.contexts.get(entry.id());
 		if (messageContext == null) {
-			messageContext = this.createMessageContext(entry);
+			messageContext = this.createMessageContext();
 		}
 		
 		String sessionId = messageContext.global() != null ? messageContext.global().sessionId() : null;
