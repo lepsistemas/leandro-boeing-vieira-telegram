@@ -31,8 +31,8 @@ public class ResponseMessageEventSubscriber implements EventSubscriber<ResponseM
 		Map<String, Object> configs = new HashMap<>();
 		
 		configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-		configs.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
-		configs.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+//		configs.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
+//		configs.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ResponseMessageEventDeserializer.class);
         
