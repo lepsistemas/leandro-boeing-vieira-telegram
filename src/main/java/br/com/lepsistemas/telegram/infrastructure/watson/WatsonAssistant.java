@@ -10,6 +10,8 @@ import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.assistant.v2.model.MessageContext;
+import com.ibm.watson.assistant.v2.model.MessageContextSkill;
+import com.ibm.watson.assistant.v2.model.MessageContextSkills;
 import com.ibm.watson.assistant.v2.model.MessageInput;
 import com.ibm.watson.assistant.v2.model.MessageInputOptions;
 import com.ibm.watson.assistant.v2.model.MessageOptions;
@@ -24,6 +26,8 @@ import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
 
 public class WatsonAssistant implements NaturalLanguageProcessing {
 
+	private static final String MAIN_SKILL = "main skill";
+	
 	private String assistantId;
 	private Assistant service;
 	
@@ -39,11 +43,7 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 	public List<EnrichedMessage> understand(EntryMessage entry) {
 		MessageContext messageContext = this.contexts.get(entry.id());
 		if (messageContext == null) {
-			messageContext = new MessageContext.Builder().build();
-		}
-		
-		if (entry.sender() != null) {
-			messageContext.skills().get("main skill").userDefined().put("recruiter_name", entry.sender());
+			messageContext = this.createMessageContext(entry);
 		}
 		
 		String sessionId = messageContext.global() != null ? messageContext.global().sessionId() : null;
@@ -51,23 +51,42 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 			sessionId = createSession();
 		}
 		
-		MessageInput messageInput = new MessageInput.Builder()
-				.text(entry.text())
-				.options(new MessageInputOptions.Builder().returnContext(true).build())
-				.build();
+		MessageInput messageInput = createMessageInput(entry);
 		
+		MessageOptions messageOptions = createMessageOptions(messageContext, sessionId, messageInput);
+		
+		MessageResponse messageResponse = this.service.message(messageOptions).execute().getResult();
+		
+		messageContext = updateMessageContext(entry, messageResponse);
+		
+		return prepareEnrichedMessages(entry, messageContext, messageResponse);
+	}
+
+	private MessageOptions createMessageOptions(MessageContext messageContext, String sessionId, MessageInput messageInput) {
 		MessageOptions messageOptions = new MessageOptions.Builder()
 				  .assistantId(this.assistantId)
 				  .sessionId(sessionId)
 				  .input(messageInput)
 				  .context(messageContext)
 				  .build();
-		
-		MessageResponse messageResponse = this.service.message(messageOptions).execute().getResult();
-		
-		messageContext = messageResponse.getContext();
+		return messageOptions;
+	}
+
+	private MessageInput createMessageInput(EntryMessage entry) {
+		MessageInput messageInput = new MessageInput.Builder()
+				.text(entry.text())
+				.options(new MessageInputOptions.Builder().returnContext(true).build())
+				.build();
+		return messageInput;
+	}
+
+	private MessageContext updateMessageContext(EntryMessage entry, MessageResponse messageResponse) {
+		MessageContext messageContext = messageResponse.getContext();
 		this.contexts.put(entry.id(), messageContext);
-		
+		return messageContext;
+	}
+
+	private List<EnrichedMessage> prepareEnrichedMessages(EntryMessage entry, MessageContext messageContext, MessageResponse messageResponse) {
 		List<EnrichedMessage> enrichedMessages = new ArrayList<>();
 		if (messageResponse.getOutput() != null && messageResponse.getOutput().getGeneric() != null) {
 			for (RuntimeResponseGeneric generic : messageResponse.getOutput().getGeneric()) {
@@ -80,8 +99,19 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 				enrichedMessages.add(enriched);
 			}
 		}
-		
 		return enrichedMessages;
+	}
+	
+	private MessageContext createMessageContext(EntryMessage entry) {
+		MessageContextSkills skills = new MessageContextSkills();
+		Map<String, Object> userDefined = new HashMap<>();
+		if (entry.sender() != null) {
+			userDefined.put("recruiter_name", entry.sender());
+		}
+		MessageContextSkill skill = new MessageContextSkill.Builder().userDefined(userDefined).build();
+		skills.put(MAIN_SKILL, skill);
+		
+		return new MessageContext.Builder().skills(skills).build();
 	}
 
 	private void extractResponse(EnrichedMessage enriched, RuntimeResponseGeneric generic) {
@@ -91,7 +121,7 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 	}
 
 	private void extractContext(EnrichedMessage enriched, MessageContext messageContext) {
-		Map<String, Object> userDefined = messageContext.skills().get("main skill").userDefined();
+		Map<String, Object> userDefined = messageContext.skills().get(MAIN_SKILL).userDefined();
 		if (userDefined != null) {
 			for(Entry<String, Object> context : userDefined.entrySet()) {
 				enriched.addContext(context.getKey(), context.getValue());
