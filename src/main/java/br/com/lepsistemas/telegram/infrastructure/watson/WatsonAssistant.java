@@ -10,8 +10,6 @@ import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.assistant.v2.model.MessageContext;
-import com.ibm.watson.assistant.v2.model.MessageContextSkill;
-import com.ibm.watson.assistant.v2.model.MessageContextSkills;
 import com.ibm.watson.assistant.v2.model.MessageInput;
 import com.ibm.watson.assistant.v2.model.MessageInputOptions;
 import com.ibm.watson.assistant.v2.model.MessageOptions;

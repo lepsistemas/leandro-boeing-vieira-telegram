@@ -22,6 +22,7 @@ public class SendMessageTask {
 	@Scheduled(fixedRate = 60000)
 	public void messages() {
 		List<ResponseMessageEvent> events = this.subscriber.subscribe();
+		SendMessageTask.log.info("--- Messages: {} ---", events);
 		for (ResponseMessageEvent event : events) {
 			ResponseMessage message = event.data();
 			SendMessageTask.log.info("--- Sending message: {} ---", message);
