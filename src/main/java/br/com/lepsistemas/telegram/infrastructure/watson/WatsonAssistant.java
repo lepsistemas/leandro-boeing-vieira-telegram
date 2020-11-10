@@ -23,7 +23,9 @@ import com.ibm.watson.assistant.v2.model.SessionResponse;
 import br.com.lepsistemas.telegram.domain.model.EnrichedMessage;
 import br.com.lepsistemas.telegram.domain.model.EntryMessage;
 import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class WatsonAssistant implements NaturalLanguageProcessing {
 
 	private static final String MAIN_SKILL = "main skill";
@@ -63,27 +65,36 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 	}
 
 	private MessageOptions createMessageOptions(MessageContext messageContext, String sessionId, MessageInput messageInput) {
-		MessageOptions messageOptions = new MessageOptions.Builder()
+		MessageOptions options = new MessageOptions.Builder()
 				  .assistantId(this.assistantId)
 				  .sessionId(sessionId)
 				  .input(messageInput)
 				  .context(messageContext)
 				  .build();
-		return messageOptions;
+		
+		WatsonAssistant.log.info("--- MessageInput: {} ---", options);
+		
+		return options;
 	}
 
 	private MessageInput createMessageInput(EntryMessage entry) {
-		MessageInput messageInput = new MessageInput.Builder()
+		MessageInput input = new MessageInput.Builder()
 				.text(entry.text())
 				.options(new MessageInputOptions.Builder().returnContext(true).build())
 				.build();
-		return messageInput;
+		
+		WatsonAssistant.log.info("--- MessageInput: {} ---", input);
+		
+		return input;
 	}
 
 	private MessageContext updateMessageContext(EntryMessage entry, MessageResponse messageResponse) {
-		MessageContext messageContext = messageResponse.getContext();
-		this.contexts.put(entry.id(), messageContext);
-		return messageContext;
+		MessageContext context = messageResponse.getContext();
+		this.contexts.put(entry.id(), context);
+		
+		WatsonAssistant.log.info("--- MessageContext Updated: {} ---", context);
+		
+		return context;
 	}
 
 	private List<EnrichedMessage> prepareEnrichedMessages(EntryMessage entry, MessageContext messageContext, MessageResponse messageResponse) {
@@ -99,6 +110,7 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 				enrichedMessages.add(enriched);
 			}
 		}
+		
 		return enrichedMessages;
 	}
 	
@@ -111,7 +123,11 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 		MessageContextSkill skill = new MessageContextSkill.Builder().userDefined(userDefined).build();
 		skills.put(MAIN_SKILL, skill);
 		
-		return new MessageContext.Builder().skills(skills).build();
+		MessageContext context = new MessageContext.Builder().skills(skills).build();
+		
+		WatsonAssistant.log.info("--- MessageContext: {} ---", context);
+		
+		return context;
 	}
 
 	private void extractResponse(EnrichedMessage enriched, RuntimeResponseGeneric generic) {
