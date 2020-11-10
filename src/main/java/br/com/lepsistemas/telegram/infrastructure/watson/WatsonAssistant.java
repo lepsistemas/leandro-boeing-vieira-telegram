@@ -120,7 +120,10 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 		if (entry.sender() != null) {
 			userDefined.put("recruiter_name", entry.sender());
 		}
-		MessageContextSkill skill = new MessageContextSkill.Builder().userDefined(userDefined).build();
+		MessageContextSkill skill = new MessageContextSkill.Builder()
+				.userDefined(userDefined)
+				.system(new HashMap<>())
+				.build();
 		skills.put(MAIN_SKILL, skill);
 		
 		MessageContext context = new MessageContext.Builder().skills(skills).build();
