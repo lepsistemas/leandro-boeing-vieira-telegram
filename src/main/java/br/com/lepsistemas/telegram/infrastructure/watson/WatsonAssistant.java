@@ -114,19 +114,8 @@ public class WatsonAssistant implements NaturalLanguageProcessing {
 		return enrichedMessages;
 	}
 	
-	private MessageContext createMessageContext(EntryMessage entry) {
-		MessageContextSkills skills = new MessageContextSkills();
-		Map<String, Object> userDefined = new HashMap<>();
-		if (entry.sender() != null) {
-			userDefined.put("recruiter_name", entry.sender());
-		}
-		MessageContextSkill skill = new MessageContextSkill.Builder()
-				.userDefined(userDefined)
-				.system(new HashMap<>())
-				.build();
-		skills.put(MAIN_SKILL, skill);
-		
-		MessageContext context = new MessageContext.Builder().skills(skills).build();
+	private MessageContext createMessageContext() {
+		MessageContext context = new MessageContext.Builder().build();
 		
 		WatsonAssistant.log.info("--- MessageContext: {} ---", context);
 		
