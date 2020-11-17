@@ -9,15 +9,10 @@ import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.pengrad.telegrambot.TelegramBot;
 
-import br.com.lepsistemas.telegram.domain.model.event.ResponseMessageEvent;
 import br.com.lepsistemas.telegram.domain.usecase.AnswerRecruiter;
 import br.com.lepsistemas.telegram.domain.usecase.EmojiInterpolation;
 import br.com.lepsistemas.telegram.domain.usecase.Messaging;
 import br.com.lepsistemas.telegram.domain.usecase.NaturalLanguageProcessing;
-import br.com.lepsistemas.telegram.domain.usecase.event.EventPublisher;
-import br.com.lepsistemas.telegram.domain.usecase.event.EventSubscriber;
-import br.com.lepsistemas.telegram.infrastructure.event.ResponseMessageEventPublisher;
-import br.com.lepsistemas.telegram.infrastructure.event.ResponseMessageEventSubscriber;
 import br.com.lepsistemas.telegram.infrastructure.telegram.TelegramMessaging;
 import br.com.lepsistemas.telegram.infrastructure.telegram.UnicodeEmojiInterpolation;
 import br.com.lepsistemas.telegram.infrastructure.watson.WatsonAssistant;
@@ -52,8 +47,8 @@ public class BeanConfiguration {
 	private String kafkaPassword;
 	
 	@Bean
-	public AnswerRecruiter answerRecruiter(EventPublisher<ResponseMessageEvent> publisher, NaturalLanguageProcessing nlp, EmojiInterpolation emojiInterpolation) {
-		return new AnswerRecruiter(publisher, nlp, emojiInterpolation);
+	public AnswerRecruiter answerRecruiter(Messaging messaging, NaturalLanguageProcessing nlp, EmojiInterpolation emojiInterpolation) {
+		return new AnswerRecruiter(messaging, nlp, emojiInterpolation);
 	}
 	
 	@Bean
@@ -86,14 +81,4 @@ public class BeanConfiguration {
 		return new UnicodeEmojiInterpolation();
 	}
 	
-	@Bean
-	public EventPublisher<ResponseMessageEvent> responseMessageEventPublisher() {
-		return new ResponseMessageEventPublisher(this.kafkaBootstrapServers, this.kafkaClientId, this.kafkaUsername, this.kafkaPassword);
-	}
-	
-	@Bean
-	public EventSubscriber<ResponseMessageEvent> responseMessageEventSubscriber() {
-		return new ResponseMessageEventSubscriber(this.kafkaBootstrapServers, this.kafkaGroupId, this.kafkaClientId, this.kafkaUsername, this.kafkaPassword);
-	}
-
 }
