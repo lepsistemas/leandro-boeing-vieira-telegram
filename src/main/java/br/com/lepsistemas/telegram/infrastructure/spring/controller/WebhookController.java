@@ -28,6 +28,7 @@ public class WebhookController {
 	
 	@PostMapping("/webhook")
 	public ResponseEntity<List<String>> webhook(@RequestBody String body) {
+		WebhookController.log.info("--- Body: {} ---", body);
 		Update update = BotUtils.parseUpdate(body);
 		EntryMessage message = UpdateToEntryMessage.convert(update);
 		List<ResponseMessage> response = this.answer.to(message);
