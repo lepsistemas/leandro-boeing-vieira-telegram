@@ -4,6 +4,7 @@ plugins {
 	id 'io.freefair.lombok' version '5.1.1'
 	id 'java'
 	id 'jacoco'
+	id 'eclipse'
 }
 
 group = 'br.com.lepsistemas'
@@ -15,19 +16,19 @@ repositories {
 }
 
 dependencies {
-	compile 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation 'com.tngtech.archunit:archunit-junit5:0.14.1'
-	compile 'com.github.pengrad:java-telegram-bot-api:4.9.0'
-	compile 'com.ibm.watson:assistant:8.6.0'
-	compile 'org.springframework.boot:spring-boot-starter-log4j2'
-	compile 'org.apache.logging.log4j:log4j-mongodb3:2.12.1'
-	compile 'org.mongodb:mongo-java-driver:3.12.7'
-	compile 'org.codehaus.groovy:groovy-jsr223:3.0.5'
-	compile 'org.apache.kafka:kafka-clients:2.6.0'
-	compile 'com.google.code.gson:gson:2.8.6'
+	implementation 'com.github.pengrad:java-telegram-bot-api:4.9.0'
+	implementation 'com.ibm.watson:assistant:8.6.0'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.apache.logging.log4j:log4j-mongodb3:2.12.1'
+	implementation 'org.mongodb:mongo-java-driver:3.12.7'
+	implementation 'org.codehaus.groovy:groovy-jsr223:3.0.5'
+	implementation 'org.apache.kafka:kafka-clients:2.6.0'
+	implementation 'com.google.code.gson:gson:2.8.6'
 	compileOnly 'org.projectlombok:lombok:1.18.12'
 }
 
